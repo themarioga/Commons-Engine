@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dataset SYSTEM "src/test/resources/schema.dtd">
+<dataset>
+    <Game ID="11" STATUS="0" ROOM_ID="1" CREATOR_ID="1" />
+    <Game ID="12" STATUS="1" ROOM_ID="3" CREATOR_ID="2" />
+</dataset>

@@ -1,0 +1,57 @@
+<!ELEMENT dataset (
+        Configuration*,
+        Game*,
+        Lang*,
+        Player*,
+        Room*,
+        Tag*,
+        Users*)>
+
+        <!ELEMENT Configuration EMPTY>
+        <!ATTLIST Configuration
+                CONF_KEY CDATA #REQUIRED
+                CONF_VALUE CDATA #REQUIRED
+                >
+
+        <!ELEMENT Game EMPTY>
+        <!ATTLIST Game
+                ID CDATA #IMPLIED
+                ROOM_ID CDATA #REQUIRED
+                CREATOR_ID CDATA #REQUIRED
+                STATUS CDATA #REQUIRED
+                >
+
+        <!ELEMENT Lang EMPTY>
+        <!ATTLIST Lang
+                ID CDATA #REQUIRED
+                NAME CDATA #REQUIRED
+                >
+
+        <!ELEMENT Player EMPTY>
+        <!ATTLIST Player
+                ID CDATA #REQUIRED
+                JOIN_ORDER CDATA #REQUIRED
+                GAME_ID CDATA #REQUIRED
+                USER_ID CDATA #REQUIRED
+                >
+
+        <!ELEMENT Room EMPTY>
+        <!ATTLIST Room
+                ACTIVE CDATA #REQUIRED
+                ID CDATA #REQUIRED
+                NAME CDATA #REQUIRED
+                >
+
+        <!ELEMENT Tag EMPTY>
+        <!ATTLIST Tag
+                ID CDATA #REQUIRED
+                NAME CDATA #REQUIRED
+                >
+
+        <!ELEMENT Users EMPTY>
+        <!ATTLIST Users
+                ACTIVE CDATA #REQUIRED
+                ID CDATA #REQUIRED
+                NAME CDATA #REQUIRED
+                LANG_ID CDATA #REQUIRED
+                >

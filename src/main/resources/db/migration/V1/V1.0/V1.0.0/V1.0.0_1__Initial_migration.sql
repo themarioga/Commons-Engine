@@ -1,0 +1,71 @@
+-- v1.0.0_1 - First version of database (basic tables)
+
+-- Bot config
+
+DROP TABLE IF EXISTS t_configuration;
+CREATE TABLE IF NOT EXISTS t_configuration
+(
+    conf_key   TEXT NOT NULL,
+    conf_value TEXT NOT NULL,
+    PRIMARY KEY (conf_key)
+);
+
+-- Basic tables
+
+DROP TABLE IF EXISTS t_user;
+CREATE TABLE IF NOT EXISTS t_user
+(
+    id     BIGINT NOT NULL,
+    name   TEXT    NOT NULL,
+    active BOOLEAN DEFAULT 1,
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX user_idx_id ON t_user (id);
+
+DROP TABLE IF EXISTS t_room;
+CREATE TABLE IF NOT EXISTS t_room
+(
+    id       BIGINT NOT NULL,
+    name     TEXT    NOT NULL,
+    active   BOOLEAN DEFAULT 1,
+    PRIMARY KEY (id)
+);
+
+CREATE INDEX room_idx_id ON t_room (id);
+
+-- Tables for games
+
+DROP TABLE IF EXISTS t_game;
+CREATE TABLE IF NOT EXISTS t_game
+(
+    id                  BIGINT NOT NULL AUTO_INCREMENT,
+    room_id             BIGINT NOT NULL,
+    creator_id          BIGINT NOT NULL,
+    status              TINYINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (room_id) REFERENCES t_room (id),
+    FOREIGN KEY (creator_id) REFERENCES t_user (id),
+    UNIQUE (room_id)
+);
+
+CREATE INDEX game_idx_id ON t_game (id);
+CREATE INDEX game_room_idx_id ON t_game (room_id);
+CREATE INDEX game_creator_idx_id ON t_game (creator_id);
+
+DROP TABLE IF EXISTS t_player;
+CREATE TABLE IF NOT EXISTS t_player
+(
+    id         BIGINT NOT NULL AUTO_INCREMENT,
+    user_id    BIGINT NOT NULL,
+    game_id    BIGINT NOT NULL,
+    join_order TINYINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES t_user (id),
+    FOREIGN KEY (game_id) REFERENCES t_game (id),
+    UNIQUE (user_id)
+);
+
+CREATE INDEX player_idx_id ON t_player (id);
+CREATE INDEX player_user_idx_id ON t_player (user_id);
+CREATE INDEX player_game_idx_id ON t_player (game_id);
