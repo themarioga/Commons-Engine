@@ -1,11 +1,10 @@
 package org.themarioga.game.commons.dao.intf;
 
-import org.themarioga.game.commons.dao.InterfaceHibernateDao;
 import org.themarioga.game.commons.models.Game;
 import org.themarioga.game.commons.models.Room;
 import org.themarioga.game.commons.models.User;
 
-public interface GameDao extends InterfaceHibernateDao<Game> {
+public interface GameDao {
 
     Game getByRoom(Room room);
 

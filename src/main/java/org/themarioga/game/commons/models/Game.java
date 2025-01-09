@@ -5,15 +5,9 @@ import org.themarioga.game.commons.enums.GameStatusEnum;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Game extends Base {
+public abstract class Game extends Base {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(nullable = false)
     private GameStatusEnum status;
 
@@ -31,13 +25,7 @@ public class Game extends Base {
     @JoinTable(joinColumns = @JoinColumn(nullable = false), inverseJoinColumns = @JoinColumn(name = "player_id", nullable = false))
     private List<Player> deletionVotes = new ArrayList<>(0);
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public abstract Long getId();
 
     public GameStatusEnum getStatus() {
         return status;
@@ -77,24 +65,6 @@ public class Game extends Base {
 
     public void setDeletionVotes(List<Player> deletionVotes) {
         this.deletionVotes = deletionVotes;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Game card = (Game) object;
-        return Objects.equals(id, card.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Game{" + "id=" + id + ", status=" + status + "}";
     }
 
 }

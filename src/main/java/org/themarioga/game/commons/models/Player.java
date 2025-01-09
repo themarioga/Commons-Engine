@@ -2,15 +2,8 @@ package org.themarioga.game.commons.models;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
+public abstract class Player extends Base {
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Player extends Base {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     @Column(nullable = false)
     private Integer joinOrder;
 
@@ -21,13 +14,7 @@ public class Player extends Base {
     @JoinColumn(nullable = false, unique = true)
     private User user;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public abstract Long getId();
 
     public Integer getJoinOrder() {
         return joinOrder;
@@ -53,22 +40,4 @@ public class Player extends Base {
         this.user = user;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Player player = (Player) o;
-        return id.equals(player.id) && joinOrder.equals(player.joinOrder) && game.equals(player.game) && user.equals(player.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Player{" + "id=" + id + ", joinOrder=" + joinOrder + "}";
-    }
 }

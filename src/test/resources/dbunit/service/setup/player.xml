@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE dataset SYSTEM "src/test/resources/schema.dtd">
-<dataset>
-    <Player ID="10" USER_ID="0" GAME_ID="10" JOIN_ORDER="0" />
-    <Player ID="11" USER_ID="1" GAME_ID="10" JOIN_ORDER="1" />
-    <Player ID="12" USER_ID="3" GAME_ID="10" JOIN_ORDER="2" />
-</dataset>
