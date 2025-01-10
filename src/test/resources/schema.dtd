@@ -19,21 +19,22 @@
 
         <!ELEMENT Room EMPTY>
         <!ATTLIST Room
-                ACTIVE CDATA #REQUIRED
                 ID CDATA #REQUIRED
                 NAME CDATA #REQUIRED
+                ACTIVE CDATA #REQUIRED
                 >
 
         <!ELEMENT Tag EMPTY>
         <!ATTLIST Tag
-                ID CDATA #REQUIRED
-                NAME CDATA #REQUIRED
+                TAG CDATA #REQUIRED
+                TEXT CDATA #REQUIRED
+                LANG_ID CDATA #REQUIRED
                 >
 
         <!ELEMENT Users EMPTY>
         <!ATTLIST Users
-                ACTIVE CDATA #REQUIRED
                 ID CDATA #REQUIRED
                 NAME CDATA #REQUIRED
+                ACTIVE CDATA #REQUIRED
                 LANG_ID CDATA #REQUIRED
                 >
