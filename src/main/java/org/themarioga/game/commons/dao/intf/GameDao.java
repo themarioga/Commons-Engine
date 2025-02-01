@@ -13,4 +13,5 @@ public interface GameDao {
     Long countByRoom(Room room);
 
     Long countByCreator(User creator);
+
 }
