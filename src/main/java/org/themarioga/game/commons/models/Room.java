@@ -2,27 +2,19 @@ package org.themarioga.game.commons.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
 @Entity
+@Table(indexes = {@Index(columnList = "name")})
 public class Room extends Base {
 
-    @Id
-    private Long id;
     @Column(length = 256, nullable = false)
     private String name;
     @Column(nullable = false)
     private Boolean active;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -44,18 +36,18 @@ public class Room extends Base {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        Room card = (Room) object;
-        return Objects.equals(id, card.id);
+        Room room = (Room) object;
+        return Objects.equals(getId(), room.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
-        return "Room{" + "id=" + id + ", name='" + name + '\'' + ", active=" + active + '}';
+        return "Room{id=" + getName() + ", name='" + name + '\'' + ", active=" + active + '}';
     }
 
 }

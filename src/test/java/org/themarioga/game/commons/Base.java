@@ -2,8 +2,6 @@ package org.themarioga.game.commons;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import jakarta.persistence.EntityManager;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,17 +23,17 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
 @Transactional
 @Rollback
-public class BaseTest {
+public abstract class Base {
 
     @Autowired
     private EntityManager entityManager;
 
     @BeforeEach
     public void beforeTests() {
-        getCurrentSession().clear();
+        entityManager.clear();
 
-        getCurrentSession().createNativeQuery("CREATE TABLE t_configuration(conf_key TEXT NOT NULL, conf_value TEXT NOT NULL, PRIMARY KEY (conf_key))").executeUpdate();
-        getCurrentSession().createNativeQuery("INSERT INTO t_configuration(conf_key, conf_value) VALUES ('default_language', 'es')").executeUpdate();
+        entityManager.createNativeQuery("CREATE TABLE t_configuration(conf_key TEXT NOT NULL, conf_value TEXT NOT NULL, PRIMARY KEY (conf_key))").executeUpdate();
+        entityManager.createNativeQuery("INSERT INTO t_configuration(conf_key, conf_value) VALUES ('default_language', 'es')").executeUpdate();
     }
 
     protected Session getCurrentSession() {

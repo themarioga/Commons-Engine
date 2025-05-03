@@ -5,18 +5,17 @@ import org.hibernate.Session;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 public interface InterfaceHibernateDao<T extends Serializable> {
     // API
-    T create(T entity);
-
-    T update(T entity);
+    T createOrUpdate(T entity);
 
     void delete(T entity);
 
-    void deleteById(long entityId);
+    void deleteById(UUID id);
 
-    T findOne(long id);
+    T findOne(UUID id);
 
     List<T> findAll();
 

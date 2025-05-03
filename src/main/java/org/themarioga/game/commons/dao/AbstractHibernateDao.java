@@ -8,12 +8,12 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class AbstractHibernateDao<T extends Serializable> implements InterfaceHibernateDao<T> {
 
     private Class<T> clazz;
 
-    @Autowired
     protected EntityManager entityManager;
 
     public final void setClazz(final Class<T> clazzToSet) {
@@ -22,43 +22,37 @@ public abstract class AbstractHibernateDao<T extends Serializable> implements In
 
     // API
     @Override
-    public T create(final T entity) {
+    public T createOrUpdate(final T entity) {
         Assert.notNull(entity, "No puede ser null");
-        getCurrentSession().persist(entity);
-        return entity;
-    }
 
-    @Override
-    public T update(final T entity) {
-        Assert.notNull(entity, "No puede ser null");
-        return getCurrentSession().merge(entity);
+        return getEntityManager().merge(entity);
     }
 
     @Override
     public void delete(final T entity) {
         Assert.notNull(entity, "No puede ser null");
-        getCurrentSession().remove(entity);
+        getEntityManager().remove(entity);
     }
 
     @Override
-    public void deleteById(final long entityId) {
+    public void deleteById(final UUID entityId) {
         final T entity = findOne(entityId);
         delete(entity);
     }
 
     @Override
-    public T findOne(final long id) {
-        return getCurrentSession().get(clazz, id);
+    public T findOne(final UUID id) {
+        return getEntityManager().find(clazz, id);
     }
 
     @Override
     public List<T> findAll() {
-        return getCurrentSession().createQuery("from " + clazz.getName(), clazz).list();
+        return getEntityManager().createQuery("from " + clazz.getName(), clazz).getResultList();
     }
 
     @Override
     public Long countAll() {
-        return getCurrentSession().createQuery("from " + clazz.getName(), clazz).stream().count();
+        return getEntityManager().createQuery("from " + clazz.getName(), clazz).getResultStream().count();
     }
 
     @Override
@@ -69,6 +63,11 @@ public abstract class AbstractHibernateDao<T extends Serializable> implements In
     @Override
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
+    }
+
+    @Autowired
+    public void setEntityManager(final EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
 }

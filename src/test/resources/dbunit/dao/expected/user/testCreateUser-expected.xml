@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE dataset SYSTEM "src/test/resources/schema.dtd">
 <dataset>
-    <T_user ID="0" NAME="First" ACTIVE="true" LANG_ID="es"/>
-    <T_user ID="1" NAME="Second" ACTIVE="true" LANG_ID="es"/>
-    <T_user ID="2" NAME="Test user" ACTIVE="true" LANG_ID="es"/>
+    <Users NAME="First" ACTIVE="true" LANG_ID="es"/>
+    <Users NAME="Test user" ACTIVE="true" LANG_ID="es"/>
 </dataset>

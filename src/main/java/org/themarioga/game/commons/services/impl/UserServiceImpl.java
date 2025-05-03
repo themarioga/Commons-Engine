@@ -19,6 +19,7 @@ import org.themarioga.game.commons.util.Assert;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,28 +35,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
-    public User createOrReactivate(long id, String name, Lang language) {
-        logger.debug("Creating or reactivating user: {} ({})", id, name);
+    public User createOrReactivate(String name, Lang language) {
+        logger.debug("Creating or reactivating user: {} ({})", name, language);
 
-        Assert.assertNotNull(id, ErrorEnum.USER_ID_EMPTY);
         Assert.assertNotEmpty(name, ErrorEnum.USER_NAME_EMPTY);
 
-        User userFromBd = userDao.findOne(id);
+        User userFromBd = userDao.getByUsername(name);
         if (userFromBd == null) {
             User user = new User();
-            user.setId(id);
             user.setName(name);
             user.setActive(true);
             user.setLang(language);
             user.setCreationDate(new Date());
-            return userDao.create(user);
+            return userDao.createOrUpdate(user);
         } else {
             if (Boolean.FALSE.equals(userFromBd.getActive())) {
                 userFromBd.setName(name);
                 userFromBd.setActive(true);
-                return userDao.update(userFromBd);
+                return userDao.createOrUpdate(userFromBd);
             } else {
-                logger.error("Error trying to create user {} ({}): Already exists", id, name);
+                logger.error("Error trying to create user {} ({}): Already exists", name, language);
                 throw new UserAlreadyExistsException();
             }
         }
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
         user.setName(newName);
 
-        return userDao.update(user);
+        return userDao.createOrUpdate(user);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
         user.setActive(active);
 
-        return userDao.update(user);
+        return userDao.createOrUpdate(user);
     }
 
     @Override
@@ -88,12 +87,12 @@ public class UserServiceImpl implements UserService {
 
         user.setLang(language);
 
-        return userDao.update(user);
+        return userDao.createOrUpdate(user);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
-    public User getById(long id) {
+    public User getById(UUID id) {
         logger.debug("Getting user with ID: {}", id);
 
         User user = userDao.findOne(id);

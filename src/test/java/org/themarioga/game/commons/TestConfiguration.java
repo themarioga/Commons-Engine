@@ -19,11 +19,11 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(basePackages = "org.themarioga.game.commons.dao")
 public class TestConfiguration {
 
-    @Autowired
-    private DataSource dataSource;
-
     @Value("${dbunit.schema}")
     private String schema;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Bean
     public DatabaseDataSourceConnectionFactoryBean dbUnitDatabaseConnection() {

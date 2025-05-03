@@ -4,10 +4,11 @@ import org.themarioga.game.commons.models.Lang;
 import org.themarioga.game.commons.models.User;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserService {
 
-    User createOrReactivate(long id, String name, Lang language);
+    User createOrReactivate(String name, Lang language);
 
     User rename(User user, String newName);
 
@@ -15,7 +16,7 @@ public interface UserService {
 
     User setLanguage(User user, Lang language);
 
-    User getById(long id);
+    User getById(UUID id);
 
     User getByUsername(String username);
 

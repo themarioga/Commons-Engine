@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "T_user")
+@Table(name = "Users", indexes = {@Index(columnList = "name")})
 public class User extends Base {
 
-    @Id
-    private Long id;
     @Column(length = 256, nullable = false)
     private String name;
     @Column(nullable = false)
@@ -17,14 +15,6 @@ public class User extends Base {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Lang lang;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -54,18 +44,18 @@ public class User extends Base {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        User card = (User) object;
-        return Objects.equals(id, card.id);
+        User user = (User) object;
+        return Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", name='" + name + '\'' + ", active=" + active + '}';
+        return "User{id=" + getId() + ", name='" + name + '\'' + ", active=" + active + '}';
     }
 
 }

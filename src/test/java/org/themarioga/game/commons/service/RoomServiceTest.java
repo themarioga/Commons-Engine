@@ -4,49 +4,58 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.game.commons.BaseTest;
+import org.themarioga.game.commons.Base;
+import org.themarioga.game.commons.exceptions.room.RoomAlreadyExistsException;
 import org.themarioga.game.commons.exceptions.room.RoomDoesntExistsException;
 import org.themarioga.game.commons.exceptions.room.RoomNotActiveException;
 import org.themarioga.game.commons.models.Room;
 import org.themarioga.game.commons.services.intf.RoomService;
 
 import java.util.List;
+import java.util.UUID;
 
 @DatabaseSetup("classpath:dbunit/service/setup/lang.xml")
 @DatabaseSetup("classpath:dbunit/service/setup/user.xml")
 @DatabaseSetup("classpath:dbunit/service/setup/room.xml")
-class RoomServiceTest extends BaseTest {
+class RoomServiceTest extends Base {
 
     @Autowired
     RoomService roomService;
 
     @Test
     void testCreateOrReactivate() {
-        Room room = roomService.createOrReactivate(5L, "Test");
+        Room room = roomService.createOrReactivate("Test");
 
         Assertions.assertNotNull(room);
-        Assertions.assertEquals(5L, room.getId());
+        Assertions.assertNotNull(room.getId());
         Assertions.assertEquals("Test", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testCreateOrReactivate_Reactivate() {
-        Room room = roomService.createOrReactivate(3L, "Fourth");
+        Room room = roomService.createOrReactivate("Third");
 
         Assertions.assertNotNull(room);
-        Assertions.assertEquals(3L, room.getId());
-        Assertions.assertEquals("Fourth", room.getName());
+        Assertions.assertEquals(UUID.fromString("22222222-2222-2222-2222-222222222222"), room.getId());
+        Assertions.assertEquals("Third", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testCreateOrReactivate_AlreadyActive() {
-        Room room = roomService.createOrReactivate(0L, "First");
+        Assertions.assertThrows(RoomAlreadyExistsException.class, () -> roomService.createOrReactivate("First"));
+    }
+
+    @Test
+    void testRename() {
+        Room room = roomService.getById(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+
+        roomService.rename(room, "Newname");
 
         Assertions.assertNotNull(room);
-        Assertions.assertEquals(0L, room.getId());
-        Assertions.assertEquals("First", room.getName());
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
+        Assertions.assertEquals("Newname", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
@@ -57,29 +66,29 @@ class RoomServiceTest extends BaseTest {
         Room room = roomService.setActive(roomList.get(2), true);
 
         Assertions.assertNotNull(room);
-        Assertions.assertEquals(2L, room.getId());
+        Assertions.assertEquals(UUID.fromString("22222222-2222-2222-2222-222222222222"), room.getId());
         Assertions.assertEquals("Third", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testGetById() {
-        Room room = roomService.getById(0L);
+        Room room = roomService.getById(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
         Assertions.assertNotNull(room);
-        Assertions.assertEquals(0L, room.getId());
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
         Assertions.assertEquals("First", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testGetById_NonExistant() {
-        Assertions.assertThrows(RoomDoesntExistsException.class, () -> roomService.getById(10L));
+        Assertions.assertThrows(RoomDoesntExistsException.class, () -> roomService.getById(UUID.fromString("00000000-0000-0000-0000-000000000001")));
     }
 
     @Test
     void testGetById_NotActive() {
-        Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getById(2L));
+        Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getById(UUID.fromString("22222222-2222-2222-2222-222222222222")));
     }
 
 }

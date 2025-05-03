@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.themarioga.game.commons.dao.intf.RoomDao;
 import org.themarioga.game.commons.enums.ErrorEnum;
 import org.themarioga.game.commons.exceptions.ApplicationException;
+import org.themarioga.game.commons.exceptions.room.RoomAlreadyExistsException;
 import org.themarioga.game.commons.exceptions.room.RoomDoesntExistsException;
 import org.themarioga.game.commons.exceptions.room.RoomNotActiveException;
 import org.themarioga.game.commons.models.Room;
@@ -17,6 +18,7 @@ import org.themarioga.game.commons.util.Assert;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -32,31 +34,39 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
-    public Room createOrReactivate(long id, String name) {
-        logger.debug("Creating or reactivating room: {} ({})", id, name);
+    public Room createOrReactivate(String name) {
+        logger.debug("Creating or reactivating room: {}", name);
 
-        Assert.assertNotNull(id, ErrorEnum.ROOM_ID_EMPTY);
         Assert.assertNotEmpty(name, ErrorEnum.ROOM_NAME_EMPTY);
 
-        Room roomFromBd = roomDao.findOne(id);
+        Room roomFromBd = roomDao.getRoomName(name);
         if (roomFromBd == null) {
             Room room = new Room();
-            room.setId(id);
             room.setName(name);
             room.setActive(true);
             room.setCreationDate(new Date());
 
-            return roomDao.create(room);
+            return roomDao.createOrUpdate(room);
         } else {
             if (Boolean.FALSE.equals(roomFromBd.getActive())) {
                 roomFromBd.setName(name);
                 roomFromBd.setActive(true);
-                return roomDao.update(roomFromBd);
+                return roomDao.createOrUpdate(roomFromBd);
             } else {
-                roomFromBd.setName(name);
-                return roomDao.update(roomFromBd);
+                logger.error("Error trying to create room {}: Already exists", name);
+                throw new RoomAlreadyExistsException();
             }
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
+    public Room rename(Room room, String newName) {
+        logger.debug("Renaming user with ID {} to {}", room.getId(), newName);
+
+        room.setName(newName);
+
+        return roomDao.createOrUpdate(room);
     }
 
     @Override
@@ -66,12 +76,12 @@ public class RoomServiceImpl implements RoomService {
 
         room.setActive(active);
 
-        return roomDao.update(room);
+        return roomDao.createOrUpdate(room);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
-    public Room getById(long id) {
+    public Room getById(UUID id) {
         logger.debug("Getting room with ID: {}", id);
 
         Room room = roomDao.findOne(id);

@@ -3,7 +3,7 @@
         Lang*,
         Room*,
         Tag*,
-        T_user*)>
+        Users*)>
 
         <!ELEMENT Configuration EMPTY>
         <!ATTLIST Configuration
@@ -22,6 +22,7 @@
                 ID CDATA #REQUIRED
                 NAME CDATA #REQUIRED
                 ACTIVE CDATA #REQUIRED
+                CREATION_DATE CDATA #REQUIRED
                 >
 
         <!ELEMENT Tag EMPTY>
@@ -31,10 +32,11 @@
                 LANG_ID CDATA #REQUIRED
                 >
 
-        <!ELEMENT T_user EMPTY>
-        <!ATTLIST T_user
+        <!ELEMENT Users EMPTY>
+        <!ATTLIST Users
                 ID CDATA #REQUIRED
                 NAME CDATA #REQUIRED
                 ACTIVE CDATA #REQUIRED
                 LANG_ID CDATA #REQUIRED
+                CREATION_DATE CDATA #REQUIRED
                 >
