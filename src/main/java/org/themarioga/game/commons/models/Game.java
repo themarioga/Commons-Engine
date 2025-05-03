@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "aGame")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Game extends Base {
 
     @Column(nullable = false)
@@ -24,7 +24,7 @@ public abstract class Game extends Base {
     private List<Player> players = new ArrayList<>(0);
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "game_deletion_votes", joinColumns = @JoinColumn(nullable = false), inverseJoinColumns = @JoinColumn(name = "player_id", nullable = false))
+    @JoinTable(name = "game_deletion_votes", joinColumns = @JoinColumn(name = "game_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "player_id", nullable = false))
     private List<Player> deletionVotes = new ArrayList<>(0);
 
     public GameStatusEnum getStatus() {

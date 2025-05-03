@@ -4,27 +4,30 @@ import org.themarioga.game.commons.enums.GameStatusEnum;
 import org.themarioga.game.commons.models.Game;
 import org.themarioga.game.commons.models.Player;
 import org.themarioga.game.commons.models.Room;
+import org.themarioga.game.commons.models.User;
 
-public interface GameService {
+import java.util.UUID;
 
-    Game create(long roomId, String roomName, long creatorId);
+public interface GameService<T extends Game> {
 
-    Game delete(Game game);
+    T create(String roomName, User creator);
 
-    Game setStatus(Game game, GameStatusEnum gameStatusEnum);
+    T delete(T game);
 
-    Game addPlayer(Game game, Player player);
+    T setStatus(T game, GameStatusEnum gameStatusEnum);
 
-    Game removePlayer(Game game, Player player);
+    T addPlayer(T game, Player player);
 
-    Game startGame(Game game);
+    T removePlayer(T game, Player player);
 
-    Game endGame(Game game);
+    T startGame(T game);
 
-    Game voteForDeletion(Game game, long userId);
+    T endGame(T game);
 
-    Game getByRoom(Room room);
+    T voteForDeletion(T game, Player player);
 
-    Game getByRoomId(long roomId);
+    T getByRoom(Room room);
+
+    T getByRoomId(UUID roomId);
 
 }

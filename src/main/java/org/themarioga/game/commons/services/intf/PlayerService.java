@@ -4,16 +4,18 @@ import org.themarioga.game.commons.models.Game;
 import org.themarioga.game.commons.models.Player;
 import org.themarioga.game.commons.models.User;
 
-public interface PlayerService {
+import java.util.UUID;
 
-    Player create(Game game, long userId);
+public interface PlayerService<T extends Player> {
 
-    void delete(Player player);
+    T create(Game game, User user);
 
-    Player findById(long id);
+    void delete(T player);
 
-    Player findByUser(User user);
+    T findById(UUID id);
 
-    Player findByUserId(long id);
+    T findByUser(User user);
+
+    T findByUserId(UUID userId);
 
 }

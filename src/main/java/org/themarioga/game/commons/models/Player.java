@@ -2,8 +2,8 @@ package org.themarioga.game.commons.models;
 
 import jakarta.persistence.*;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Entity(name = "aPlayer")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Player extends Base {
 
     @Column(nullable = false)
