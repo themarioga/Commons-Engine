@@ -15,6 +15,8 @@ public interface RoomService {
 
     Room getById(UUID id);
 
+    Room getRoomName(String roomname);
+
     List<Room> getAllRooms();
 
 }

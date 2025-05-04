@@ -99,6 +99,24 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    public Room getRoomName(String roomname) {
+        logger.debug("Getting room with name {}", roomname);
+
+        Room room = roomDao.getRoomName(roomname);
+        if (room == null) {
+            logger.error("Error getting room with roomname {}: Doesn't exists.", roomname);
+            throw new RoomDoesntExistsException();
+        }
+        if (Boolean.FALSE.equals(room.getActive())) {
+            logger.error("Error getting room with roomname {}: Not active.", roomname);
+            throw new RoomNotActiveException();
+        }
+
+        return room;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
     public List<Room> getAllRooms() {
         logger.debug("Getting all rooms");
 
