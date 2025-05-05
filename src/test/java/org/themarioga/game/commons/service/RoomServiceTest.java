@@ -91,4 +91,24 @@ class RoomServiceTest extends Base {
         Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getById(UUID.fromString("22222222-2222-2222-2222-222222222222")));
     }
 
+    @Test
+    void testGetByName() {
+        Room room = roomService.getByName("First");
+
+        Assertions.assertNotNull(room);
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
+        Assertions.assertEquals("First", room.getName());
+        Assertions.assertEquals(true, room.getActive());
+    }
+
+    @Test
+    void testGetByName_NonExistant() {
+        Assertions.assertThrows(RoomDoesntExistsException.class, () -> roomService.getByName("Hello"));
+    }
+
+    @Test
+    void testGetByName_NotActive() {
+        Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getByName("Third"));
+    }
+
 }

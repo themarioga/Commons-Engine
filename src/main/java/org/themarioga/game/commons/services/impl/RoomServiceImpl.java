@@ -99,7 +99,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
-    public Room getRoomName(String roomname) {
+    public Room getByName(String roomname) {
         logger.debug("Getting room with name {}", roomname);
 
         Room room = roomDao.getRoomName(roomname);

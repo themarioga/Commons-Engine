@@ -10,12 +10,13 @@ public class Tag {
     @Id
     private String tag;
 
-    @Column(length = 4000, nullable = false)
-    private String text;
-
+    @Id
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Lang lang;
+
+    @Column(length = 4000, nullable = false)
+    private String text;
 
     public String getTag() {
         return tag;

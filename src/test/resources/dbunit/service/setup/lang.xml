@@ -2,5 +2,5 @@
 <!DOCTYPE dataset SYSTEM "src/test/resources/schema.dtd">
 <dataset>
     <Lang ID="es" NAME="Español"/>
-    <Lang ID="EN" NAME="English"/>
+    <Lang ID="en" NAME="English"/>
 </dataset>

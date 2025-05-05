@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE dataset SYSTEM "src/test/resources/schema.dtd">
 <dataset>
-    <Lang ID="es" NAME="Español"/>
-    <Lang ID="en" NAME="English"/>
+    <Tag TAG="salutation" TEXT="Hola" LANG_ID="es"/>
+    <Tag TAG="salutation" TEXT="Hello" LANG_ID="en"/>
 </dataset>
