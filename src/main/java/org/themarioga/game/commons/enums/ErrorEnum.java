@@ -22,10 +22,11 @@ public enum ErrorEnum {
     GAME_ALREADY_STARTED(19L, "Juego ya iniciado"),
     GAME_CREATOR_ALREADY_EXISTS(20L, "El creador ya tiene un juego en marcha"),
     GAME_CREATOR_CANNOT_LEAVE(21L, "El creador no puede dejar el juego"),
-    PLAYER_NOT_FOUND(21L, "Jugador no encontrado"),
-    PLAYER_ALREADY_EXISTS(22L, "Jugador ya existente"),
-    PLAYER_ALREADY_VOTED_DELETION(23L, "El jugador ya ha votado"),
-    PLAYER_CANNOT_VOTE_DELETION(24L, "El jugador no puede votar");
+    PLAYER_NOT_FOUND(22L, "Jugador no encontrado"),
+    PLAYER_ALREADY_EXISTS(23L, "Jugador ya existente"),
+    PLAYER_ALREADY_VOTED_DELETION(24L, "El jugador ya ha votado"),
+    PLAYER_CANNOT_VOTE_DELETION(25L, "El jugador no puede votar"),
+    DICTIONARY_NOT_FOUND(26L, "El jugador no puede votar");
 
     final Long errorCode;
     final String errorDesc;
