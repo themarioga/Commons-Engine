@@ -20,9 +20,6 @@ public abstract class Game extends Base {
     @JoinColumn(nullable = false, unique = true)
     private User creator;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "game", orphanRemoval = true)
-    private List<Player> players = new ArrayList<>(0);
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "game_deletion_votes", joinColumns = @JoinColumn(name = "game_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "player_id", nullable = false))
     private List<Player> deletionVotes = new ArrayList<>(0);
@@ -49,14 +46,6 @@ public abstract class Game extends Base {
 
     public void setCreator(User creator) {
         this.creator = creator;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
     }
 
     public List<Player> getDeletionVotes() {

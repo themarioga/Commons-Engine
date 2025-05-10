@@ -15,18 +15,19 @@ public enum ErrorEnum {
     ROOM_ALREADY_EXISTS(12L, "La sala ya existe"),
     GAME_NOT_FOUND(13L, "Juego no encontrado"),
     GAME_NOT_CONFIGURED(14L, "Juego no configurado"),
-    GAME_NOT_FILLED(15L, "Juego no completado"),
-    GAME_ALREADY_EXISTS(16L, "Juego ya creado"),
-    GAME_ALREADY_CONFIGURED(17L, "Juego ya configurado"),
-    GAME_ALREADY_FILLED(18L, "Juego lleno"),
-    GAME_ALREADY_STARTED(19L, "Juego ya iniciado"),
-    GAME_CREATOR_ALREADY_EXISTS(20L, "El creador ya tiene un juego en marcha"),
-    GAME_CREATOR_CANNOT_LEAVE(21L, "El creador no puede dejar el juego"),
-    PLAYER_NOT_FOUND(22L, "Jugador no encontrado"),
-    PLAYER_ALREADY_EXISTS(23L, "Jugador ya existente"),
-    PLAYER_ALREADY_VOTED_DELETION(24L, "El jugador ya ha votado"),
-    PLAYER_CANNOT_VOTE_DELETION(25L, "El jugador no puede votar"),
-    DICTIONARY_NOT_FOUND(26L, "El jugador no puede votar");
+    GAME_NOT_ENDING(15L, "Juego en marcha"),
+    GAME_NOT_FILLED(16L, "Juego no completado"),
+    GAME_ALREADY_EXISTS(17L, "Juego ya creado"),
+    GAME_ALREADY_CONFIGURED(18L, "Juego ya configurado"),
+    GAME_ALREADY_FILLED(19L, "Juego lleno"),
+    GAME_ALREADY_STARTED(20L, "Juego ya iniciado"),
+    GAME_CREATOR_ALREADY_EXISTS(21L, "El creador ya tiene un juego en marcha"),
+    GAME_CREATOR_CANNOT_LEAVE(22L, "El creador no puede dejar el juego"),
+    PLAYER_NOT_FOUND(23L, "Jugador no encontrado"),
+    PLAYER_ALREADY_EXISTS(24L, "Jugador ya existente"),
+    PLAYER_ALREADY_VOTED_DELETION(25L, "El jugador ya ha votado"),
+    PLAYER_CANNOT_VOTE_DELETION(26L, "El jugador no puede votar"),
+    DICTIONARY_NOT_FOUND(27L, "El jugador no puede votar");
 
     final Long errorCode;
     final String errorDesc;

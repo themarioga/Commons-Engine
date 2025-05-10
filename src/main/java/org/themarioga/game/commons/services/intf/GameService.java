@@ -8,26 +8,26 @@ import org.themarioga.game.commons.models.User;
 
 import java.util.UUID;
 
-public interface GameService<T extends Game> {
+public interface GameService<G extends Game, P extends Player> {
 
-    T create(String roomName, User creator);
+    G create(String roomName, User creator);
 
-    T delete(T game);
+    void delete(G game);
 
-    T setStatus(T game, GameStatusEnum gameStatusEnum);
+    G setStatus(G game, GameStatusEnum gameStatusEnum);
 
-    T addPlayer(T game, Player player);
+    G addPlayer(G game, P player);
 
-    T removePlayer(T game, Player player);
+    G removePlayer(G game, P player);
 
-    T startGame(T game);
+    G startGame(G game);
 
-    T endGame(T game);
+    void endGame(G game);
 
-    T voteForDeletion(T game, Player player);
+    G voteForDeletion(G game, P player);
 
-    T getByRoom(Room room);
+    G getByRoom(Room room);
 
-    T getByRoomId(UUID roomId);
+    G getByRoomId(UUID roomId);
 
 }

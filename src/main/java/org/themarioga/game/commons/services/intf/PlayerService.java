@@ -6,16 +6,16 @@ import org.themarioga.game.commons.models.User;
 
 import java.util.UUID;
 
-public interface PlayerService<T extends Player> {
+public interface PlayerService<P extends Player, G extends Game> {
 
-    T create(Game game, User user);
+    P create(G game, User user);
 
-    void delete(T player);
+    void delete(P player);
 
-    T findById(UUID id);
+    P findById(UUID id);
 
-    T findByUser(User user);
+    P findByUser(User user);
 
-    T findByUserId(UUID userId);
+    P findByUserId(UUID userId);
 
 }
