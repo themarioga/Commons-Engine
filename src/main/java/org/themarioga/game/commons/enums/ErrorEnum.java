@@ -27,7 +27,9 @@ public enum ErrorEnum {
     PLAYER_ALREADY_EXISTS(24L, "Jugador ya existente"),
     PLAYER_ALREADY_VOTED_DELETION(25L, "El jugador ya ha votado"),
     PLAYER_CANNOT_VOTE_DELETION(26L, "El jugador no puede votar"),
-    DICTIONARY_NOT_FOUND(27L, "El jugador no puede votar");
+    ROUND_NOT_STARTED(27L, "La ronda no se ha iniciado"),
+    ROUND_NOT_ENDING(28L, "La ronda no ha acabado"),
+    DICTIONARY_NOT_FOUND(28L, "El jugador no puede votar");
 
     final Long errorCode;
     final String errorDesc;
