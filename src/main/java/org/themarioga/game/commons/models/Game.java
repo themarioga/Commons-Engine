@@ -21,8 +21,8 @@ public abstract class Game extends Base {
     private User creator;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "game_deletion_votes", joinColumns = @JoinColumn(name = "game_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "player_id", nullable = false))
-    private List<Player> deletionVotes = new ArrayList<>(0);
+    @JoinTable(name = "game_deletion_votes", joinColumns = @JoinColumn(name = "game_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false))
+    private List<User> deletionVotes = new ArrayList<>(0);
 
     public GameStatusEnum getStatus() {
         return status;
@@ -48,11 +48,11 @@ public abstract class Game extends Base {
         this.creator = creator;
     }
 
-    public List<Player> getDeletionVotes() {
+    public List<User> getDeletionVotes() {
         return deletionVotes;
     }
 
-    public void setDeletionVotes(List<Player> deletionVotes) {
+    public void setDeletionVotes(List<User> deletionVotes) {
         this.deletionVotes = deletionVotes;
     }
 

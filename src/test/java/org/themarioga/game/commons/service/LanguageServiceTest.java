@@ -13,33 +13,33 @@ import java.util.List;
 @DatabaseSetup("classpath:dbunit/service/setup/lang.xml")
 class LanguageServiceTest extends Base {
 
-	@Autowired
-	private LanguageService languageService;
+    @Autowired
+    private LanguageService languageService;
 
-	@Test
-	void testGetLanguage() {
-		Lang language = languageService.getLanguage("es");
+    @Test
+    void testGetLanguage() {
+        Lang language = languageService.getLanguage("es");
 
-		Assertions.assertNotNull(language);
-		Assertions.assertEquals("es", language.getId());
-		Assertions.assertEquals("Español", language.getName());
-	}
+        Assertions.assertNotNull(language);
+        Assertions.assertEquals("es", language.getId());
+        Assertions.assertEquals("Español", language.getName());
+    }
 
-	@Test
-	void testGetDefaultLanguage() {
-		Lang language = languageService.getDefaultLanguage();
+    @Test
+    void testGetDefaultLanguage() {
+        Lang language = languageService.getDefaultLanguage();
 
-		Assertions.assertNotNull(language);
-		Assertions.assertEquals("es", language.getId());
-		Assertions.assertEquals("Español", language.getName());
-	}
+        Assertions.assertNotNull(language);
+        Assertions.assertEquals("es", language.getId());
+        Assertions.assertEquals("Español", language.getName());
+    }
 
-	@Test
-	void testGetAllLanguages() {
-		List<Lang> langList = languageService.getLangs();
+    @Test
+    void testGetAllLanguages() {
+        List<Lang> langList = languageService.getLangs();
 
-		Assertions.assertEquals(2, langList.size());
-		Assertions.assertEquals("es", langList.get(0).getId());
-	}
+        Assertions.assertEquals(2, langList.size());
+        Assertions.assertEquals("es", langList.get(0).getId());
+    }
 
 }

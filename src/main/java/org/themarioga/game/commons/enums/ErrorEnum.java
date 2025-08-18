@@ -29,7 +29,8 @@ public enum ErrorEnum {
     PLAYER_CANNOT_VOTE_DELETION(26L, "El jugador no puede votar"),
     ROUND_NOT_STARTED(27L, "La ronda no se ha iniciado"),
     ROUND_NOT_ENDING(28L, "La ronda no ha acabado"),
-    DICTIONARY_NOT_FOUND(28L, "El jugador no puede votar");
+    DICTIONARY_NOT_FOUND(28L, "El diccionario no existe"),
+	CARD_NOT_FOUND(29L, "La carta no existe");
 
     final Long errorCode;
     final String errorDesc;

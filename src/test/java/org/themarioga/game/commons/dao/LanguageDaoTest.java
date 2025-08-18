@@ -13,29 +13,29 @@ import java.util.List;
 @DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
 class LanguageDaoTest extends Base {
 
-	@Autowired
-	private LanguageDao languageDao;
+    @Autowired
+    private LanguageDao languageDao;
 
-	@Test
-	void testFindById() {
-		Lang lang = languageDao.getLanguage("es");
+    @Test
+    void testFindById() {
+        Lang lang = languageDao.getLanguage("es");
 
-		Assertions.assertNotNull(lang);
-		Assertions.assertEquals("es", lang.getId());
-		Assertions.assertEquals("Español", lang.getName());
-	}
+        Assertions.assertNotNull(lang);
+        Assertions.assertEquals("es", lang.getId());
+        Assertions.assertEquals("Español", lang.getName());
+    }
 
-	@Test
-	void testCheckLangExists() {
-		Assertions.assertTrue(languageDao.checkLanguageExists("es"));
-	}
+    @Test
+    void testCheckLangExists() {
+        Assertions.assertTrue(languageDao.checkLanguageExists("es"));
+    }
 
-	@Test
-	void testFindAll() {
-		List<Lang> langList = languageDao.getLanguages();
+    @Test
+    void testFindAll() {
+        List<Lang> langList = languageDao.getLanguages();
 
-		Assertions.assertEquals(2, langList.size());
-		Assertions.assertEquals("es", langList.get(0).getId());
-	}
+        Assertions.assertEquals(2, langList.size());
+        Assertions.assertEquals("es", langList.get(0).getId());
+    }
 
 }

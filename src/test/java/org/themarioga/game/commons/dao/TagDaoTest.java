@@ -16,19 +16,19 @@ import java.util.List;
 @DatabaseSetup("classpath:dbunit/dao/setup/tag.xml")
 class TagDaoTest extends Base {
 
-	@Autowired
-	private LanguageDao languageDao;
+    @Autowired
+    private LanguageDao languageDao;
 
-	@Autowired
-	private TagDao tagDao;
+    @Autowired
+    private TagDao tagDao;
 
-	@Test
-	void testFindTag() {
-		Lang lang = languageDao.getLanguage("es");
+    @Test
+    void testFindTag() {
+        Lang lang = languageDao.getLanguage("es");
 
-		List<Tag> tagList = tagDao.getTagsByLang(lang);
+        List<Tag> tagList = tagDao.getTagsByLang(lang);
 
-		Assertions.assertEquals(1, tagList.size());
-	}
+        Assertions.assertEquals(1, tagList.size());
+    }
 
 }
