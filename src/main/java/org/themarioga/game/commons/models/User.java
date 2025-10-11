@@ -2,8 +2,6 @@ package org.themarioga.game.commons.models;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "Users", indexes = {@Index(columnList = "name")})
 public class User extends Base {
@@ -38,19 +36,6 @@ public class User extends Base {
 
     public void setLang(Lang lang) {
         this.lang = lang;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        User user = (User) object;
-        return Objects.equals(getId(), user.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     @Override

@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
-import java.util.Objects;
-
 @Entity
 @Table(indexes = {@Index(columnList = "name")})
 public class Room extends Base {
@@ -30,19 +28,6 @@ public class Room extends Base {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Room room = (Room) object;
-        return Objects.equals(getId(), room.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     @Override

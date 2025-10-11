@@ -57,19 +57,6 @@ public abstract class Game extends Base {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Game game = (Game) o;
-        return getId().equals(game.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getId().hashCode();
-    }
-
-    @Override
     public String toString() {
         return "Game{" + "id=" + getId() + ", room=" + room + ", status=" + status + ", creator=" + creator + '}';
     }

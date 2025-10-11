@@ -31,4 +31,20 @@ public class Base implements Serializable {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Base base = (Base) o;
+		return getId().equals(base.getId()) && getCreationDate().equals(base.getCreationDate());
+	}
+
+	@Override
+	public int hashCode() {
+		int result = getId().hashCode();
+		result = 31 * result + getCreationDate().hashCode();
+		return result;
+	}
+
 }
