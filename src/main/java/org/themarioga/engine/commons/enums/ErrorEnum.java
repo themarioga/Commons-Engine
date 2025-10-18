@@ -23,14 +23,16 @@ public enum ErrorEnum {
     GAME_ALREADY_STARTED(20L, "Juego ya iniciado"),
     GAME_CREATOR_ALREADY_EXISTS(21L, "El creador ya tiene un juego en marcha"),
     GAME_CREATOR_CANNOT_LEAVE(22L, "El creador no puede dejar el juego"),
-    PLAYER_NOT_FOUND(23L, "Jugador no encontrado"),
-    PLAYER_ALREADY_EXISTS(24L, "Jugador ya existente"),
-    PLAYER_ALREADY_VOTED_DELETION(25L, "El jugador ya ha votado"),
-    PLAYER_CANNOT_VOTE_DELETION(26L, "El jugador no puede votar"),
-    ROUND_NOT_STARTED(27L, "La ronda no se ha iniciado"),
-    ROUND_NOT_ENDING(28L, "La ronda no ha acabado"),
-    DICTIONARY_NOT_FOUND(28L, "El diccionario no existe"),
-    CARD_NOT_FOUND(29L, "La carta no existe");
+	GAME_ONLY_CREATOR_CAN_PERFORM_ACTION(23L, "Solo el creador puede realizar esta acción"),
+    PLAYER_NOT_FOUND(24L, "Jugador no encontrado"),
+    PLAYER_ALREADY_EXISTS(25L, "Jugador ya existente"),
+    PLAYER_ALREADY_VOTED_DELETION(26L, "El jugador ya ha votado"),
+    PLAYER_CANNOT_VOTE_DELETION(27L, "El jugador no puede votar"),
+    ROUND_NOT_STARTED(28L, "La ronda no se ha iniciado"),
+    ROUND_NOT_ENDING(29L, "La ronda no ha acabado"),
+    DICTIONARY_NOT_FOUND(30L, "El diccionario no existe"),
+    CARD_NOT_FOUND(31L, "La carta no existe"),
+	UNKNOWN_ERROR(32L, "Error desconocido");
 
     final Long errorCode;
     final String errorDesc;
