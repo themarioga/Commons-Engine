@@ -28,11 +28,12 @@ public enum ErrorEnum {
     PLAYER_ALREADY_EXISTS(25L, "Jugador ya existente"),
     PLAYER_ALREADY_VOTED_DELETION(26L, "El jugador ya ha votado"),
     PLAYER_CANNOT_VOTE_DELETION(27L, "El jugador no puede votar"),
-    ROUND_NOT_STARTED(28L, "La ronda no se ha iniciado"),
-    ROUND_NOT_ENDING(29L, "La ronda no ha acabado"),
-    DICTIONARY_NOT_FOUND(30L, "El diccionario no existe"),
-    CARD_NOT_FOUND(31L, "La carta no existe"),
-	UNKNOWN_ERROR(32L, "Error desconocido");
+	ROUND_NOT_FOUND(28L, "La ronda no se ha iniciado"),
+    ROUND_NOT_STARTED(29L, "La ronda no se ha iniciado"),
+    ROUND_NOT_ENDING(30L, "La ronda no ha acabado"),
+    DICTIONARY_NOT_FOUND(31L, "El diccionario no existe"),
+    CARD_NOT_FOUND(32L, "La carta no existe"),
+	UNKNOWN_ERROR(33L, "Error desconocido");
 
     final Long errorCode;
     final String errorDesc;
