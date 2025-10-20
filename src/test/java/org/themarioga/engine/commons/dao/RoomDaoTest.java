@@ -6,7 +6,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.dao.intf.RoomDao;
 import org.themarioga.engine.commons.models.Room;
 
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
 @DatabaseSetup("classpath:dbunit/dao/setup/room.xml")
-class RoomDaoTest extends Base {
+class RoomDaoTest extends BaseTest {
 
     @Autowired
     private RoomDao roomDao;

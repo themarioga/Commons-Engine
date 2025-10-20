@@ -3,10 +3,10 @@ package org.themarioga.engine.commons.dao;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.dao.intf.ConfigurationDao;
 
-class ConfigurationDaoTest extends Base {
+class ConfigurationDaoTest extends BaseTest {
 
     @Autowired
     private ConfigurationDao configurationDao;

@@ -23,7 +23,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class})
 @Transactional
 @Rollback
-public abstract class Base {
+public abstract class BaseTest {
 
     @Autowired
     private EntityManager entityManager;

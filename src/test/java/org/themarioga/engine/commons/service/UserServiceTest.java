@@ -4,7 +4,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.exceptions.user.UserAlreadyExistsException;
 import org.themarioga.engine.commons.exceptions.user.UserDoesntExistsException;
 import org.themarioga.engine.commons.exceptions.user.UserNotActiveException;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @DatabaseSetup("classpath:dbunit/service/setup/lang.xml")
 @DatabaseSetup("classpath:dbunit/service/setup/user.xml")
-class UserServiceTest extends Base {
+class UserServiceTest extends BaseTest {
 
     @Autowired
     UserService userService;

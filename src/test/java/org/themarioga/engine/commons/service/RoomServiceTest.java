@@ -4,7 +4,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.exceptions.room.RoomAlreadyExistsException;
 import org.themarioga.engine.commons.exceptions.room.RoomDoesntExistsException;
 import org.themarioga.engine.commons.exceptions.room.RoomNotActiveException;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @DatabaseSetup("classpath:dbunit/service/setup/lang.xml")
 @DatabaseSetup("classpath:dbunit/service/setup/user.xml")
 @DatabaseSetup("classpath:dbunit/service/setup/room.xml")
-class RoomServiceTest extends Base {
+class RoomServiceTest extends BaseTest {
 
     @Autowired
     RoomService roomService;

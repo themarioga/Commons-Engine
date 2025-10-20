@@ -6,7 +6,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.dao.intf.LanguageDao;
 import org.themarioga.engine.commons.dao.intf.UserDao;
 import org.themarioga.engine.commons.models.User;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
 @DatabaseSetup("classpath:dbunit/dao/setup/user.xml")
-class UserDaoTest extends Base {
+class UserDaoTest extends BaseTest {
 
     @Autowired
     private UserDao userDao;

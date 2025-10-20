@@ -4,14 +4,14 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.dao.intf.LanguageDao;
 import org.themarioga.engine.commons.models.Lang;
 
 import java.util.List;
 
 @DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
-class LanguageDaoTest extends Base {
+class LanguageDaoTest extends BaseTest {
 
     @Autowired
     private LanguageDao languageDao;

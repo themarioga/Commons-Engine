@@ -4,14 +4,14 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.Base;
+import org.themarioga.engine.commons.BaseTest;
 import org.themarioga.engine.commons.models.Lang;
 import org.themarioga.engine.commons.services.intf.LanguageService;
 
 import java.util.List;
 
 @DatabaseSetup("classpath:dbunit/service/setup/lang.xml")
-class LanguageServiceTest extends Base {
+class LanguageServiceTest extends BaseTest {
 
     @Autowired
     private LanguageService languageService;
