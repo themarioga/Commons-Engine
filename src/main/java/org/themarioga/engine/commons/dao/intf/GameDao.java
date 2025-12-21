@@ -4,11 +4,11 @@ import org.themarioga.engine.commons.models.Game;
 import org.themarioga.engine.commons.models.Room;
 import org.themarioga.engine.commons.models.User;
 
-public interface GameDao {
+public interface GameDao<G extends Game> {
 
-    Game getByRoom(Room room);
+    G getByRoom(Room room);
 
-    Game getByCreator(User creator);
+    G getByCreator(User creator);
 
     Long countByRoom(Room room);
 
