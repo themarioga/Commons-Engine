@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.themarioga.engine.commons.config.CommonsConfig;
 import org.themarioga.engine.commons.dao.intf.LanguageDao;
 import org.themarioga.engine.commons.exceptions.ApplicationException;
 import org.themarioga.engine.commons.models.Lang;
-import org.themarioga.engine.commons.services.intf.ConfigurationService;
 import org.themarioga.engine.commons.services.intf.LanguageService;
 
 import java.util.List;
@@ -20,12 +20,12 @@ public class LanguageServiceImpl implements LanguageService {
     private final Logger logger = LoggerFactory.getLogger(LanguageServiceImpl.class);
 
     private final LanguageDao languageDao;
-    private final ConfigurationService configurationService;
+    private final CommonsConfig commonsConfig;
 
     @Autowired
-    public LanguageServiceImpl(LanguageDao languageDao, ConfigurationService configurationService) {
+    public LanguageServiceImpl(LanguageDao languageDao, CommonsConfig commonsConfig) {
         this.languageDao = languageDao;
-        this.configurationService = configurationService;
+        this.commonsConfig = commonsConfig;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LanguageServiceImpl implements LanguageService {
     public Lang getDefaultLanguage() {
         logger.debug("Getting default language");
 
-        return languageDao.getLanguage(configurationService.getConfiguration("default_language"));
+        return languageDao.getLanguage(commonsConfig.getDefaultLanguage());
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface GameService<G extends Game, P extends Player> {
 
     G create(Room room, User creator);
 
-	G update(G game);
+    G update(G game);
 
     void delete(G game);
 

@@ -11,12 +11,12 @@ import org.themarioga.engine.commons.services.intf.TagService;
 @DatabaseSetup("classpath:dbunit/service/setup/tag.xml")
 class TagServiceTest extends BaseTest {
 
-	@Autowired
-	private TagService tagService;
+    @Autowired
+    private TagService tagService;
 
-	@Test
-	void testGetTagsByLang() {
-		Assertions.assertNotNull(tagService.getTagsByLang("en"));
-	}
+    @Test
+    void testGetTagsByLang() {
+        Assertions.assertNotNull(tagService.getTagsByLang("en"));
+    }
 
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TagService {
 
-	List<Tag> getTagsByLang(String lang);
+    List<Tag> getTagsByLang(String lang);
 
 }

@@ -31,9 +31,6 @@ public abstract class BaseTest {
     @BeforeEach
     public void beforeTests() {
         entityManager.clear();
-
-        entityManager.createNativeQuery("CREATE TABLE t_configuration(conf_key TEXT NOT NULL, conf_value TEXT NOT NULL, PRIMARY KEY (conf_key))").executeUpdate();
-        entityManager.createNativeQuery("INSERT INTO t_configuration(conf_key, conf_value) VALUES ('default_language', 'es')").executeUpdate();
     }
 
     protected Session getCurrentSession() {

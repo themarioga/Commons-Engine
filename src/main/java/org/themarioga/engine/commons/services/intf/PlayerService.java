@@ -8,16 +8,16 @@ import java.util.UUID;
 
 public interface PlayerService<P extends Player, G extends Game> {
 
-	P create(G game, User user);
+    P create(G game, User user);
 
-	void delete(P player);
+    void delete(P player);
 
-	P findById(UUID id);
+    P findById(UUID id);
 
-	P findByUser(User user);
+    P findByUser(User user);
 
-	P findByUserId(UUID userId);
+    P findByUserId(UUID userId);
 
-	P findPlayerByGameAndUser(G game, User user);
+    P findPlayerByGameAndUser(G game, User user);
 
 }

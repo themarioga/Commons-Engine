@@ -13,21 +13,21 @@ import java.util.List;
 @Service
 public class TagServiceImpl implements TagService {
 
-	private final TagDao tagDao;
-	private final LanguageService languageService;
+    private final TagDao tagDao;
+    private final LanguageService languageService;
 
-	@Autowired
-	public TagServiceImpl(TagDao tagDao, LanguageService languageService) {
-		this.tagDao = tagDao;
-		this.languageService = languageService;
-	}
+    @Autowired
+    public TagServiceImpl(TagDao tagDao, LanguageService languageService) {
+        this.tagDao = tagDao;
+        this.languageService = languageService;
+    }
 
-	@Override
-	public List<Tag> getTagsByLang(String lang) {
-		Lang language = languageService.getLanguage(lang);
-		if (language == null) language = languageService.getDefaultLanguage();
+    @Override
+    public List<Tag> getTagsByLang(String lang) {
+        Lang language = languageService.getLanguage(lang);
+        if (language == null) language = languageService.getDefaultLanguage();
 
-		return tagDao.getTagsByLang(language);
-	}
+        return tagDao.getTagsByLang(language);
+    }
 
 }
