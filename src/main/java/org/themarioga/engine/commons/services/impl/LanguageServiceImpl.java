@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.themarioga.engine.commons.config.CommonsConfig;
 import org.themarioga.engine.commons.dao.intf.LanguageDao;
-import org.themarioga.engine.commons.exceptions.ApplicationException;
 import org.themarioga.engine.commons.models.Lang;
 import org.themarioga.engine.commons.services.intf.LanguageService;
 
@@ -29,7 +28,7 @@ public class LanguageServiceImpl implements LanguageService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Lang getLanguage(String id) {
         logger.debug("Getting language by id: {}", id);
 
@@ -37,7 +36,7 @@ public class LanguageServiceImpl implements LanguageService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Lang getDefaultLanguage() {
         logger.debug("Getting default language");
 
@@ -45,7 +44,7 @@ public class LanguageServiceImpl implements LanguageService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Lang> getLangs() {
         logger.debug("Getting all languages");
 

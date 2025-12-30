@@ -14,6 +14,8 @@ public interface GameService<G extends Game, P extends Player> {
 
     void delete(G game);
 
+    G setMaxNumberOfPlayers(G game, int maxNumberOfPlayers);
+
     G setStatus(G game, GameStatusEnum gameStatusEnum);
 
     G addPlayer(G game, P player);

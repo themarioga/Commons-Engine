@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.themarioga.engine.commons.dao.intf.TagDao;
-import org.themarioga.engine.commons.exceptions.ApplicationException;
 import org.themarioga.engine.commons.models.Lang;
 import org.themarioga.engine.commons.models.Tag;
 import org.themarioga.engine.commons.security.SecurityUtils;
@@ -31,7 +30,7 @@ public class I18NServiceImpl implements I18NService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Lang getLanguage(String lang) {
         Lang language;
         if (lang != null) {
@@ -47,25 +46,25 @@ public class I18NServiceImpl implements I18NService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Lang> getLanguages() {
         return languageService.getLangs();
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public String get(String tag, String lang) {
         return getTextByTag(tag, getLanguage(lang));
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public String get(String tag) {
         return getTextByTag(tag, getUserLangOrDefault());
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public String get(String tag, Lang lang) {
         return getTextByTag(tag, lang);
     }

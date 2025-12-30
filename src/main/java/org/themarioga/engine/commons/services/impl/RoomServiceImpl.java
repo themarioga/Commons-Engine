@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.themarioga.engine.commons.dao.intf.RoomDao;
-import org.themarioga.engine.commons.enums.ErrorEnum;
+import org.themarioga.engine.commons.enums.CommonErrorEnum;
 import org.themarioga.engine.commons.exceptions.ApplicationException;
 import org.themarioga.engine.commons.exceptions.room.RoomAlreadyExistsException;
 import org.themarioga.engine.commons.exceptions.room.RoomDoesntExistsException;
@@ -37,7 +37,7 @@ public class RoomServiceImpl implements RoomService {
     public Room createOrReactivate(String name) {
         logger.debug("Creating or reactivating room: {}", name);
 
-        Assert.assertNotEmpty(name, ErrorEnum.ROOM_NAME_EMPTY);
+        Assert.assertNotEmpty(name, CommonErrorEnum.ROOM_NAME_EMPTY);
 
         Room roomFromBd = roomDao.getRoomName(name);
         if (roomFromBd == null) {
@@ -80,7 +80,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Room getById(UUID id) {
         logger.debug("Getting room with ID: {}", id);
 
@@ -98,7 +98,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Room getByName(String roomname) {
         logger.debug("Getting room with name {}", roomname);
 
@@ -116,7 +116,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<Room> getAllRooms() {
         logger.debug("Getting all rooms");
 

@@ -1,15 +1,8 @@
 <!ELEMENT dataset (
-        Configuration*,
         Lang*,
         Room*,
         Tag*,
         Users*)>
-
-        <!ELEMENT Configuration EMPTY>
-        <!ATTLIST Configuration
-                CONF_KEY CDATA #REQUIRED
-                CONF_VALUE CDATA #REQUIRED
-                >
 
         <!ELEMENT Lang EMPTY>
         <!ATTLIST Lang

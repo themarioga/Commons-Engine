@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.themarioga.engine.commons.dao.intf.UserDao;
-import org.themarioga.engine.commons.enums.ErrorEnum;
+import org.themarioga.engine.commons.enums.CommonErrorEnum;
 import org.themarioga.engine.commons.exceptions.ApplicationException;
 import org.themarioga.engine.commons.exceptions.user.UserAlreadyExistsException;
 import org.themarioga.engine.commons.exceptions.user.UserDoesntExistsException;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public User createOrReactivate(String name, Lang language) {
         logger.debug("Creating or reactivating user: {} ({})", name, language);
 
-        Assert.assertNotEmpty(name, ErrorEnum.USER_NAME_EMPTY);
+        Assert.assertNotEmpty(name, CommonErrorEnum.USER_NAME_EMPTY);
 
         User userFromBd = userDao.getByUsername(name);
         if (userFromBd == null) {
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public User getById(UUID id) {
         logger.debug("Getting user with ID: {}", id);
 
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public User getByUsername(String username) {
         logger.debug("Getting user with username: {}", username);
 
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS, rollbackFor = ApplicationException.class)
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<User> getAllUsers() {
         logger.debug("Getting all users");
 
