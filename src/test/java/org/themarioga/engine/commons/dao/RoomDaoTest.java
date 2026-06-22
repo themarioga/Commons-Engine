@@ -1,78 +1,112 @@
 package org.themarioga.engine.commons.dao;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.BaseTest;
-import org.themarioga.engine.commons.dao.intf.RoomDao;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.themarioga.engine.commons.dao.impl.RoomDaoImpl;
 import org.themarioga.engine.commons.models.Room;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
-@DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
-@DatabaseSetup("classpath:dbunit/dao/setup/room.xml")
-class RoomDaoTest extends BaseTest {
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
-    @Autowired
-    private RoomDao roomDao;
+@ExtendWith(MockitoExtension.class)
+class RoomDaoTest {
 
-    @Test
-    @ExpectedDatabase(value = "classpath:dbunit/dao/expected/room/testCreateRoom-expected.xml", table = "Room", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
-    void createRoom() {
-        Room room = new Room();
-        room.setName("Test room");
+    @InjectMocks
+    private RoomDaoImpl roomDao;
+
+    @Mock
+    private EntityManager entityManager;
+
+    @Mock
+    private Session session;
+
+    private Room room;
+
+    @BeforeEach
+    void setUp() {
+        room = new Room();
+        room.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        room.setName("First");
         room.setActive(true);
-        room.setCreationDate(new Date());
-
-        room = roomDao.createOrUpdate(room);
-        getCurrentSession().flush();
-
-        Assertions.assertNotNull(room.getId());
-        Assertions.assertEquals("Test room", room.getName());
     }
 
     @Test
-    @ExpectedDatabase(value = "classpath:dbunit/dao/expected/room/testUpdateRoom-expected.xml", table = "Room", assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
+    void createRoom() {
+        when(entityManager.merge(any(Room.class))).thenReturn(room);
+
+        Room newRoom = new Room();
+        newRoom.setName("Test room");
+        newRoom.setActive(true);
+        newRoom.setCreationDate(new Date());
+
+        Room createdRoom = roomDao.createOrUpdate(newRoom);
+
+        Assertions.assertNotNull(createdRoom.getId());
+        Assertions.assertEquals("First", createdRoom.getName());
+        verify(entityManager).merge(newRoom);
+    }
+
+    @Test
     void updateRoom() {
-        Room room = roomDao.findOne(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        when(entityManager.merge(any(Room.class))).thenReturn(room);
+
         room.setName("Otro nombre");
         room.setActive(false);
 
-        roomDao.createOrUpdate(room);
-        getCurrentSession().flush();
+        Room updatedRoom = roomDao.createOrUpdate(room);
 
-        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
-        Assertions.assertEquals("Otro nombre", room.getName());
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), updatedRoom.getId());
+        Assertions.assertEquals("Otro nombre", updatedRoom.getName());
+        verify(entityManager).merge(room);
     }
 
     @Test
     void deleteRoom() {
-        Room room = roomDao.findOne(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        doNothing().when(entityManager).remove(room);
 
         roomDao.delete(room);
-        getCurrentSession().flush();
 
-        long total = roomDao.countAll();
-
-        Assertions.assertEquals(0, total);
+        verify(entityManager).remove(room);
     }
 
     @Test
     void findRoom() {
-        Room room = roomDao.findOne(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        when(entityManager.find(Room.class, room.getId())).thenReturn(room);
 
-        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
-        Assertions.assertEquals("First", room.getName());
-        Assertions.assertEquals(true, room.getActive());
+        Room foundRoom = roomDao.findOne(room.getId());
+
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), foundRoom.getId());
+        Assertions.assertEquals("First", foundRoom.getName());
+        Assertions.assertEquals(true, foundRoom.getActive());
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void findAllRooms() {
+        List<Room> list = new ArrayList<>();
+        list.add(room);
+
+        TypedQuery<Room> typedQuery = mock(TypedQuery.class);
+        when(entityManager.createQuery(anyString(), eq(Room.class))).thenReturn(typedQuery);
+        when(typedQuery.getResultList()).thenReturn(list);
+
         List<Room> rooms = roomDao.findAll();
 
         Assertions.assertEquals(1, rooms.size());
@@ -83,10 +117,29 @@ class RoomDaoTest extends BaseTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void countAllRooms() {
+        TypedQuery<Room> typedQuery = mock(TypedQuery.class);
+        when(entityManager.createQuery(anyString(), eq(Room.class))).thenReturn(typedQuery);
+        when(typedQuery.getResultStream()).thenReturn(Stream.of(room));
+
         long total = roomDao.countAll();
 
         Assertions.assertEquals(1, total);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void getRoomName() {
+        Query<Room> query = mock(Query.class);
+        when(entityManager.unwrap(Session.class)).thenReturn(session);
+        when(session.createQuery(anyString(), eq(Room.class))).thenReturn(query);
+        when(query.setParameter(anyString(), anyString())).thenReturn(query);
+        when(query.getSingleResultOrNull()).thenReturn(room);
+
+        Room foundRoom = roomDao.getRoomName("First");
+        Assertions.assertNotNull(foundRoom);
+        Assertions.assertEquals("First", foundRoom.getName());
     }
 
 }

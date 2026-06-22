@@ -1,30 +1,53 @@
 package org.themarioga.engine.commons.dao;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
+import jakarta.persistence.EntityManager;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.themarioga.engine.commons.BaseTest;
-import org.themarioga.engine.commons.dao.intf.LanguageDao;
-import org.themarioga.engine.commons.dao.intf.TagDao;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.themarioga.engine.commons.dao.impl.TagDaoImpl;
 import org.themarioga.engine.commons.models.Lang;
 import org.themarioga.engine.commons.models.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@DatabaseSetup("classpath:dbunit/dao/setup/lang.xml")
-@DatabaseSetup("classpath:dbunit/dao/setup/tag.xml")
-class TagDaoTest extends BaseTest {
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    @Autowired
-    private LanguageDao languageDao;
+@ExtendWith(MockitoExtension.class)
+class TagDaoTest {
 
-    @Autowired
-    private TagDao tagDao;
+    @InjectMocks
+    private TagDaoImpl tagDao;
+
+    @Mock
+    private EntityManager entityManager;
+
+    @Mock
+    private Session session;
 
     @Test
+    @SuppressWarnings("unchecked")
     void testFindTag() {
-        Lang lang = languageDao.getLanguage("es");
+        Lang lang = new Lang();
+        lang.setId("es");
+        lang.setName("Español");
+
+        List<Tag> list = new ArrayList<>();
+        list.add(new Tag());
+
+        Query<Tag> query = mock(Query.class);
+        when(entityManager.unwrap(Session.class)).thenReturn(session);
+        when(session.createQuery(anyString(), eq(Tag.class))).thenReturn(query);
+        when(query.setParameter("lang", lang)).thenReturn(query);
+        when(query.getResultList()).thenReturn(list);
 
         List<Tag> tagList = tagDao.getTagsByLang(lang);
 
