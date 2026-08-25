@@ -6,7 +6,7 @@ import org.themarioga.engine.commons.exceptions.ApplicationException;
 public class GameCreatorAlreadyExistsException extends ApplicationException {
 
     public GameCreatorAlreadyExistsException() {
-        super(CommonErrorEnum.GAME_ALREADY_EXISTS);
+        super(CommonErrorEnum.GAME_CREATOR_ALREADY_EXISTS);
     }
 
 }

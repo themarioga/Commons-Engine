@@ -10,6 +10,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Game extends Base {
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private GameStatusEnum status;
 

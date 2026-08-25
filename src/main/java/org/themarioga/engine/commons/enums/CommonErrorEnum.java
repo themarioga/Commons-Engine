@@ -28,7 +28,8 @@ public enum CommonErrorEnum implements ErrorEnum {
     PLAYER_NOT_FOUND(24L, "Jugador no encontrado"),
     PLAYER_ALREADY_EXISTS(25L, "Jugador ya existente"),
     PLAYER_ALREADY_VOTED_DELETION(26L, "El jugador ya ha votado"),
-    PLAYER_CANNOT_VOTE_DELETION(27L, "El jugador no puede votar");
+    PLAYER_CANNOT_VOTE_DELETION(27L, "El jugador no puede votar"),
+    GAME_NOT_STARTED(28L, "Juego no iniciado");
 
     final Long errorCode;
     final String errorDesc;

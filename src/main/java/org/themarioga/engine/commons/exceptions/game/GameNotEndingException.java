@@ -6,7 +6,7 @@ import org.themarioga.engine.commons.exceptions.ApplicationException;
 public class GameNotEndingException extends ApplicationException {
 
     public GameNotEndingException() {
-        super(CommonErrorEnum.GAME_NOT_CONFIGURED);
+        super(CommonErrorEnum.GAME_NOT_ENDING);
     }
 
 }
