@@ -130,14 +130,14 @@ class RoomDaoTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void getRoomName() {
+    void getByRoomname() {
         Query<Room> query = mock(Query.class);
         when(entityManager.unwrap(Session.class)).thenReturn(session);
         when(session.createQuery(anyString(), eq(Room.class))).thenReturn(query);
         when(query.setParameter(anyString(), anyString())).thenReturn(query);
         when(query.getSingleResultOrNull()).thenReturn(room);
 
-        Room foundRoom = roomDao.getRoomName("First");
+        Room foundRoom = roomDao.getByRoomname("tg:-100001");
         Assertions.assertNotNull(foundRoom);
         Assertions.assertEquals("First", foundRoom.getName());
     }

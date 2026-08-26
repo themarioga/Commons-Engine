@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface RoomService {
 
-    Room createOrReactivate(String name);
+    Room createOrReactivate(String roomname, String name);
 
     Room rename(Room room, String newName);
 
@@ -15,7 +15,7 @@ public interface RoomService {
 
     Room getById(UUID id);
 
-    Room getByName(String roomname);
+    Room getByRoomname(String roomname);
 
     List<Room> getAllRooms();
 

@@ -29,7 +29,9 @@ public enum CommonErrorEnum implements ErrorEnum {
     PLAYER_ALREADY_EXISTS(25L, "Jugador ya existente"),
     PLAYER_ALREADY_VOTED_DELETION(26L, "El jugador ya ha votado"),
     PLAYER_CANNOT_VOTE_DELETION(27L, "El jugador no puede votar"),
-    GAME_NOT_STARTED(28L, "Juego no iniciado");
+    GAME_NOT_STARTED(28L, "Juego no iniciado"),
+    USER_USERNAME_EMPTY(29L, "El identificador de usuario no puede estar vacío"),
+    ROOM_ROOMNAME_EMPTY(30L, "El identificador de la sala no puede estar vacío");
 
     final Long errorCode;
     final String errorDesc;

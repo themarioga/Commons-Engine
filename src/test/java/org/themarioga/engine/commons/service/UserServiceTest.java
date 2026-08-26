@@ -44,12 +44,14 @@ class UserServiceTest {
 
         activeUser = new User();
         activeUser.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        activeUser.setUsername("first");
         activeUser.setName("First");
         activeUser.setActive(true);
         activeUser.setLang(defaultLang);
 
         inactiveUser = new User();
         inactiveUser.setId(UUID.fromString("22222222-2222-2222-2222-222222222222"));
+        inactiveUser.setUsername("third");
         inactiveUser.setName("Third");
         inactiveUser.setActive(false);
         inactiveUser.setLang(defaultLang);
@@ -57,50 +59,82 @@ class UserServiceTest {
 
     @Test
     void testCreateOrReactivate() {
-        when(userDao.getByUsername("Test")).thenReturn(null);
+        when(userDao.getByUsername("test")).thenReturn(null);
         when(userDao.createOrUpdate(any(User.class))).thenAnswer(invocation -> {
             User u = invocation.getArgument(0);
             u.setId(UUID.randomUUID());
             return u;
         });
 
-        User user = userService.createOrReactivate("Test", defaultLang);
+        User user = userService.createOrReactivate("test", "Test", defaultLang);
 
         Assertions.assertNotNull(user);
         Assertions.assertNotNull(user.getId());
+        Assertions.assertEquals("test", user.getUsername());
         Assertions.assertEquals("Test", user.getName());
         Assertions.assertEquals(true, user.getActive());
     }
 
+    /**
+     * Un usuario sin alias de Telegram se identifica por "tg:&lt;id&gt;", que no puede colisionar con
+     * un alias real porque Telegram no admite ':' en los alias.
+     */
+    @Test
+    void testCreateOrReactivate_SyntheticUsername() {
+        when(userDao.getByUsername("tg:123456789")).thenReturn(null);
+        when(userDao.createOrUpdate(any(User.class))).thenAnswer(invocation -> {
+            User u = invocation.getArgument(0);
+            u.setId(UUID.randomUUID());
+            return u;
+        });
+
+        User user = userService.createOrReactivate("tg:123456789", "Mario García", defaultLang);
+
+        Assertions.assertEquals("tg:123456789", user.getUsername());
+        Assertions.assertEquals("Mario García", user.getName());
+    }
+
     @Test
     void testCreateOrReactivate_Reactivate() {
-        when(userDao.getByUsername("Third")).thenReturn(inactiveUser);
+        when(userDao.getByUsername("third")).thenReturn(inactiveUser);
         when(userDao.createOrUpdate(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        User user = userService.createOrReactivate("Third", defaultLang);
+        User user = userService.createOrReactivate("third", "Third renombrado", defaultLang);
 
         Assertions.assertNotNull(user);
         Assertions.assertEquals(UUID.fromString("22222222-2222-2222-2222-222222222222"), user.getId());
-        Assertions.assertEquals("Third", user.getName());
+        Assertions.assertEquals("third", user.getUsername());
+        Assertions.assertEquals("Third renombrado", user.getName());
         Assertions.assertEquals(true, user.getActive());
     }
 
     @Test
     void testCreateOrReactivate_AlreadyActive() {
-        when(userDao.getByUsername("First")).thenReturn(activeUser);
+        when(userDao.getByUsername("first")).thenReturn(activeUser);
 
         Assertions.assertThrows(UserAlreadyExistsException.class, () -> {
-            userService.createOrReactivate("First", defaultLang);
+            userService.createOrReactivate("first", "First", defaultLang);
         });
     }
 
+    /**
+     * Dos personas distintas pueden llamarse igual: el nombre visible ya no es identidad, así que
+     * crear un usuario con un nombre repetido pero distinto username debe funcionar.
+     */
     @Test
-    void testCreateOrReactivate_AlreadyExists() {
-        when(userDao.getByUsername("Second")).thenReturn(activeUser);
-
-        Assertions.assertThrows(UserAlreadyExistsException.class, () -> {
-            userService.createOrReactivate("Second", defaultLang);
+    void testCreateOrReactivate_DuplicatedNameIsAllowed() {
+        when(userDao.getByUsername("second")).thenReturn(null);
+        when(userDao.createOrUpdate(any(User.class))).thenAnswer(invocation -> {
+            User u = invocation.getArgument(0);
+            u.setId(UUID.randomUUID());
+            return u;
         });
+
+        User user = userService.createOrReactivate("second", "First", defaultLang);
+
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals("second", user.getUsername());
+        Assertions.assertEquals("First", user.getName());
     }
 
     @Test
@@ -112,7 +146,24 @@ class UserServiceTest {
         Assertions.assertNotNull(user);
         Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), user.getId());
         Assertions.assertEquals("Newname", user.getName());
+        Assertions.assertEquals("first", user.getUsername(), "renombrar no debe tocar la identidad");
         Assertions.assertEquals(true, user.getActive());
+    }
+
+    /**
+     * Cuando un usuario de Telegram libera su alias y otro lo coge, la capa de Telegram degrada al
+     * antiguo dueño y le asigna el alias al nuevo: aquí se comprueba la primitiva que lo permite.
+     */
+    @Test
+    void testSetUsername() {
+        when(userDao.createOrUpdate(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        User user = userService.setUsername(activeUser, "tg:987654321");
+
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), user.getId());
+        Assertions.assertEquals("tg:987654321", user.getUsername());
+        Assertions.assertEquals("First", user.getName(), "cambiar la identidad no debe tocar el nombre visible");
     }
 
     @Test
@@ -164,8 +215,8 @@ class UserServiceTest {
 
     @Test
     void testGetByUsername() {
-        when(userDao.getByUsername("First")).thenReturn(activeUser);
-        User user = userService.getByUsername("First");
+        when(userDao.getByUsername("first")).thenReturn(activeUser);
+        User user = userService.getByUsername("first");
 
         Assertions.assertNotNull(user);
         Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), user.getId());

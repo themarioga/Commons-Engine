@@ -37,50 +37,75 @@ class RoomServiceTest {
     void setUp() {
         activeRoom = new Room();
         activeRoom.setId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+        activeRoom.setRoomname("tg:-100001");
         activeRoom.setName("First");
         activeRoom.setActive(true);
 
         inactiveRoom = new Room();
         inactiveRoom.setId(UUID.fromString("22222222-2222-2222-2222-222222222222"));
+        inactiveRoom.setRoomname("tg:-100003");
         inactiveRoom.setName("Third");
         inactiveRoom.setActive(false);
     }
 
     @Test
     void testCreateOrReactivate() {
-        when(roomDao.getRoomName("Test")).thenReturn(null);
+        when(roomDao.getByRoomname("tg:-100002")).thenReturn(null);
         when(roomDao.createOrUpdate(any(Room.class))).thenAnswer(invocation -> {
             Room r = invocation.getArgument(0);
             r.setId(UUID.randomUUID());
             return r;
         });
 
-        Room room = roomService.createOrReactivate("Test");
+        Room room = roomService.createOrReactivate("tg:-100002", "Test");
 
         Assertions.assertNotNull(room);
         Assertions.assertNotNull(room.getId());
+        Assertions.assertEquals("tg:-100002", room.getRoomname());
         Assertions.assertEquals("Test", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testCreateOrReactivate_Reactivate() {
-        when(roomDao.getRoomName("Third")).thenReturn(inactiveRoom);
+        when(roomDao.getByRoomname("tg:-100003")).thenReturn(inactiveRoom);
         when(roomDao.createOrUpdate(any(Room.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Room room = roomService.createOrReactivate("Third");
+        Room room = roomService.createOrReactivate("tg:-100003", "Third renombrada");
 
         Assertions.assertNotNull(room);
         Assertions.assertEquals(UUID.fromString("22222222-2222-2222-2222-222222222222"), room.getId());
-        Assertions.assertEquals("Third", room.getName());
+        Assertions.assertEquals("tg:-100003", room.getRoomname());
+        Assertions.assertEquals("Third renombrada", room.getName());
         Assertions.assertEquals(true, room.getActive());
     }
 
     @Test
     void testCreateOrReactivate_AlreadyActive() {
-        when(roomDao.getRoomName("First")).thenReturn(activeRoom);
+        when(roomDao.getByRoomname("tg:-100001")).thenReturn(activeRoom);
 
-        Assertions.assertThrows(RoomAlreadyExistsException.class, () -> roomService.createOrReactivate("First"));
+        Assertions.assertThrows(RoomAlreadyExistsException.class,
+                () -> roomService.createOrReactivate("tg:-100001", "First"));
+    }
+
+    /**
+     * Dos grupos de Telegram pueden llamarse igual: el nombre visible ya no es identidad, así que
+     * crear una sala con un nombre repetido pero distinto roomname debe funcionar.
+     */
+    @Test
+    void testCreateOrReactivate_DuplicatedNameIsAllowed() {
+        when(roomDao.getByRoomname("tg:-100099")).thenReturn(null);
+        when(roomDao.createOrUpdate(any(Room.class))).thenAnswer(invocation -> {
+            Room r = invocation.getArgument(0);
+            r.setId(UUID.randomUUID());
+            return r;
+        });
+
+        Room room = roomService.createOrReactivate("tg:-100099", "First");
+
+        Assertions.assertNotNull(room);
+        Assertions.assertEquals("tg:-100099", room.getRoomname());
+        Assertions.assertEquals("First", room.getName());
     }
 
     @Test
@@ -132,10 +157,10 @@ class RoomServiceTest {
     }
 
     @Test
-    void testGetByName() {
-        when(roomDao.getRoomName("First")).thenReturn(activeRoom);
+    void testGetByRoomname() {
+        when(roomDao.getByRoomname("tg:-100001")).thenReturn(activeRoom);
 
-        Room room = roomService.getByName("First");
+        Room room = roomService.getByRoomname("tg:-100001");
 
         Assertions.assertNotNull(room);
         Assertions.assertEquals(UUID.fromString("00000000-0000-0000-0000-000000000000"), room.getId());
@@ -144,15 +169,15 @@ class RoomServiceTest {
     }
 
     @Test
-    void testGetByName_NonExistant() {
-        when(roomDao.getRoomName("Hello")).thenReturn(null);
-        Assertions.assertThrows(RoomDoesntExistsException.class, () -> roomService.getByName("Hello"));
+    void testGetByRoomname_NonExistant() {
+        when(roomDao.getByRoomname("tg:-100404")).thenReturn(null);
+        Assertions.assertThrows(RoomDoesntExistsException.class, () -> roomService.getByRoomname("tg:-100404"));
     }
 
     @Test
-    void testGetByName_NotActive() {
-        when(roomDao.getRoomName("Third")).thenReturn(inactiveRoom);
-        Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getByName("Third"));
+    void testGetByRoomname_NotActive() {
+        when(roomDao.getByRoomname("tg:-100003")).thenReturn(inactiveRoom);
+        Assertions.assertThrows(RoomNotActiveException.class, () -> roomService.getByRoomname("tg:-100003"));
     }
 
 }

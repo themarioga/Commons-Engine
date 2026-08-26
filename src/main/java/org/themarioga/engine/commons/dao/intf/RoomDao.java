@@ -5,6 +5,6 @@ import org.themarioga.engine.commons.models.Room;
 
 public interface RoomDao extends InterfaceHibernateDao<Room> {
 
-    Room getRoomName(String roomname);
+    Room getByRoomname(String roomname);
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -32,19 +33,19 @@ public class Base implements Serializable {
         this.creationDate = creationDate;
     }
 
+    // Null-safe a propósito: una entidad recién creada todavía no tiene id ni fecha, y comparar o
+    // meter en un Set una entidad sin persistir no puede reventar con NullPointerException.
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         Base base = (Base) o;
-        return getId().equals(base.getId()) && getCreationDate().equals(base.getCreationDate());
+        return Objects.equals(getId(), base.getId()) && Objects.equals(getCreationDate(), base.getCreationDate());
     }
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
-        result = 31 * result + getCreationDate().hashCode();
-        return result;
+        return Objects.hash(getId(), getCreationDate());
     }
 
 }

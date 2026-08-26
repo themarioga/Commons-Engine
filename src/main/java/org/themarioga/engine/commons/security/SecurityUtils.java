@@ -32,6 +32,12 @@ public class SecurityUtils {
         return userDetails != null && userDetails.getUser() != null ? userDetails.getUser().getId() : null;
     }
 
+    public static String getUsername() {
+        UserDetails userDetails = getUserDetails();
+
+        return userDetails != null ? userDetails.getUser().getUsername() : null;
+    }
+
     public static String getName() {
         UserDetails userDetails = getUserDetails();
 

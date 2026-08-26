@@ -8,9 +8,11 @@ import java.util.UUID;
 
 public interface UserService {
 
-    User createOrReactivate(String name, Lang language);
+    User createOrReactivate(String username, String name, Lang language);
 
     User rename(User user, String newName);
+
+    User setUsername(User user, String newUsername);
 
     User setActive(User user, boolean active);
 

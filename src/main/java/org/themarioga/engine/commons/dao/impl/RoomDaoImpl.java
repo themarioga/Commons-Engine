@@ -13,8 +13,8 @@ public class RoomDaoImpl extends AbstractHibernateDao<Room> implements RoomDao {
     }
 
     @Override
-    public Room getRoomName(String roomname) {
-        return getCurrentSession().createQuery("SELECT r FROM Room r WHERE r.name = :roomname", Room.class).setParameter("roomname", roomname).getSingleResultOrNull();
+    public Room getByRoomname(String roomname) {
+        return getCurrentSession().createQuery("SELECT r FROM Room r WHERE r.roomname = :roomname", Room.class).setParameter("roomname", roomname).getSingleResultOrNull();
     }
 
 }

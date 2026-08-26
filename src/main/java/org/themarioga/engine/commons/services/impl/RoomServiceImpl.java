@@ -34,14 +34,16 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
-    public Room createOrReactivate(String name) {
-        logger.debug("Creating or reactivating room: {}", name);
+    public Room createOrReactivate(String roomname, String name) {
+        logger.debug("Creating or reactivating room: {} / {}", roomname, name);
 
+        Assert.assertNotEmpty(roomname, CommonErrorEnum.ROOM_ROOMNAME_EMPTY);
         Assert.assertNotEmpty(name, CommonErrorEnum.ROOM_NAME_EMPTY);
 
-        Room roomFromBd = roomDao.getRoomName(name);
+        Room roomFromBd = roomDao.getByRoomname(roomname);
         if (roomFromBd == null) {
             Room room = new Room();
+            room.setRoomname(roomname);
             room.setName(name);
             room.setActive(true);
             room.setCreationDate(new Date());
@@ -53,7 +55,7 @@ public class RoomServiceImpl implements RoomService {
                 roomFromBd.setActive(true);
                 return roomDao.createOrUpdate(roomFromBd);
             } else {
-                logger.error("Error trying to create room {}: Already exists", name);
+                logger.error("Error trying to create room {}: Already exists", roomname);
                 throw new RoomAlreadyExistsException();
             }
         }
@@ -62,7 +64,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
     public Room rename(Room room, String newName) {
-        logger.debug("Renaming user with ID {} to {}", room.getId(), newName);
+        logger.debug("Renaming room with ID {} to {}", room.getId(), newName);
+
+        Assert.assertNotEmpty(newName, CommonErrorEnum.ROOM_NAME_EMPTY);
 
         room.setName(newName);
 
@@ -99,10 +103,10 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Room getByName(String roomname) {
-        logger.debug("Getting room with name {}", roomname);
+    public Room getByRoomname(String roomname) {
+        logger.debug("Getting room with roomname {}", roomname);
 
-        Room room = roomDao.getRoomName(roomname);
+        Room room = roomDao.getByRoomname(roomname);
         if (room == null) {
             logger.error("Error getting room with roomname {}: Doesn't exists.", roomname);
             throw new RoomDoesntExistsException();

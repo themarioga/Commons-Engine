@@ -9,10 +9,27 @@ import jakarta.persistence.Table;
 @Table(indexes = {@Index(columnList = "name")})
 public class Room extends Base {
 
+    /**
+     * Identidad de la sala: única, estable y agnóstica de la plataforma. En Telegram es
+     * "tg:&lt;chatId&gt;" del grupo en el que se juega.
+     */
+    @Column(length = 128, nullable = false, unique = true)
+    private String roomname;
+    /**
+     * Nombre visible de la sala: ni único ni estable (en Telegram, el título del grupo).
+     */
     @Column(length = 256, nullable = false)
     private String name;
     @Column(nullable = false)
     private Boolean active;
+
+    public String getRoomname() {
+        return roomname;
+    }
+
+    public void setRoomname(String roomname) {
+        this.roomname = roomname;
+    }
 
     public String getName() {
         return name;
@@ -32,7 +49,7 @@ public class Room extends Base {
 
     @Override
     public String toString() {
-        return "Room{id=" + getName() + ", name='" + name + '\'' + ", active=" + active + '}';
+        return "Room{id=" + getId() + ", roomname='" + roomname + '\'' + ", name='" + name + '\'' + ", active=" + active + '}';
     }
 
 }

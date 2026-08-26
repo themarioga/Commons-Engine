@@ -4,9 +4,9 @@ import jakarta.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.themarioga.engine.commons.dao.impl.TagDaoImpl;
@@ -24,7 +24,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class TagDaoTest {
 
-    @InjectMocks
     private TagDaoImpl tagDao;
 
     @Mock
@@ -32,6 +31,13 @@ class TagDaoTest {
 
     @Mock
     private Session session;
+
+    @BeforeEach
+    void setUp() {
+        // TagDaoImpl inyecta el EntityManager por constructor sobre un campo final, así que se
+        // construye a mano: @InjectMocks no le hace llegar el mock stubbeado.
+        tagDao = new TagDaoImpl(entityManager);
+    }
 
     @Test
     @SuppressWarnings("unchecked")

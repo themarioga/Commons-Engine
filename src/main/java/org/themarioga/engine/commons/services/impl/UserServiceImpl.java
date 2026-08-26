@@ -35,14 +35,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
-    public User createOrReactivate(String name, Lang language) {
-        logger.debug("Creating or reactivating user: {} ({})", name, language);
+    public User createOrReactivate(String username, String name, Lang language) {
+        logger.debug("Creating or reactivating user: {} / {} ({})", username, name, language);
 
+        Assert.assertNotEmpty(username, CommonErrorEnum.USER_USERNAME_EMPTY);
         Assert.assertNotEmpty(name, CommonErrorEnum.USER_NAME_EMPTY);
 
-        User userFromBd = userDao.getByUsername(name);
+        User userFromBd = userDao.getByUsername(username);
         if (userFromBd == null) {
             User user = new User();
+            user.setUsername(username);
             user.setName(name);
             user.setActive(true);
             user.setLang(language);
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 userFromBd.setActive(true);
                 return userDao.createOrUpdate(userFromBd);
             } else {
-                logger.error("Error trying to create user {} ({}): Already exists", name, language);
+                logger.error("Error trying to create user {} ({}): Already exists", username, language);
                 throw new UserAlreadyExistsException();
             }
         }
@@ -65,7 +67,21 @@ public class UserServiceImpl implements UserService {
     public User rename(User user, String newName) {
         logger.debug("Renaming user with ID {} to {}", user.getId(), newName);
 
+        Assert.assertNotEmpty(newName, CommonErrorEnum.USER_NAME_EMPTY);
+
         user.setName(newName);
+
+        return userDao.createOrUpdate(user);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = ApplicationException.class)
+    public User setUsername(User user, String newUsername) {
+        logger.debug("Changing username of user with ID {} to {}", user.getId(), newUsername);
+
+        Assert.assertNotEmpty(newUsername, CommonErrorEnum.USER_USERNAME_EMPTY);
+
+        user.setUsername(newUsername);
 
         return userDao.createOrUpdate(user);
     }
