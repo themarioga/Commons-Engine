@@ -1,6 +1,6 @@
 ## Codebase Overview
 
-Engine-Commons is a shared Spring "backend commons" library (not a runnable app) providing the models, DAOs, services, security helpers, and i18n plumbing common to the "Cartas Contra la Humanidad" and "Secret Hitler" game-engine bots. It supplies concrete User/Room/Tag/Lang persistence and business logic, plus generic `Game`/`Player`/`GameDao`/`PlayerDao`/`GameService`/`PlayerService` scaffolding that each downstream engine implements with its own concrete subclasses.
+Commons-Engine is a shared Spring "backend commons" library (not a runnable app) providing the models, DAOs, services, security helpers, and i18n plumbing common to the "Cartas Contra la Humanidad" and "Secret Hitler" game-engine bots. It supplies concrete User/Room/Tag/Lang persistence and business logic, plus generic `Game`/`Player`/`GameDao`/`PlayerDao`/`GameService`/`PlayerService` scaffolding that each downstream engine implements with its own concrete subclasses.
 
 **Stack**: Java, Spring (Boot-style `@Configuration`/`@Service`/`@Repository` component scanning), Hibernate/JPA (`jakarta.persistence`), Flyway migrations, Spring Security (programmatic context, no login form), Maven (inherits from parent `org.themarioga:parent:2.0.0`). Tests use JUnit 5 + Mockito 5.
 

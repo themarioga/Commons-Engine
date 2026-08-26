@@ -10,7 +10,7 @@
         <version>2.0.0</version>
     </parent>
 
-    <artifactId>engine-commons</artifactId>
-    <name>Game Engine Commons Library</name>
-    <description>Game engine commons library for themarioga games</description>
+    <artifactId>commons-engine</artifactId>
+    <name>Commons Engine Library</name>
+    <description>Librería base común a los motores de juego: usuarios, salas, i18n y seguridad</description>
 </project>

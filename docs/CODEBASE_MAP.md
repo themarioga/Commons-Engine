@@ -10,7 +10,7 @@ total_tokens: 29707
 
 ## System Overview
 
-**Engine-Commons** (Maven artifact `engine-commons`, package `org.themarioga.engine.commons`) is a shared **"backend commons" library** — confirmed by the Spanish README: *"Este proyecto contiene los Modelos, DAOs, Servicios, etc... que conforman el 'backend' común para los engines de Cartas Contra la Humanidad y Secret Hitler"* (the models, DAOs, and services forming the common backend for two game engines — Cards Against Humanity and Secret Hitler — apparently Telegram bots, given tag strings like `ERROR_COMMAND_SHOULD_BE_ON_PRIVATE`/`GROUP`).
+**Commons-Engine** (Maven artifact `engine-commons`, package `org.themarioga.commons.engine`) is a shared **"backend commons" library** — confirmed by the Spanish README: *"Este proyecto contiene los Modelos, DAOs, Servicios, etc... que conforman el 'backend' común para los engines de Cartas Contra la Humanidad y Secret Hitler"* (the models, DAOs, and services forming the common backend for two game engines — Cards Against Humanity and Secret Hitler — apparently Telegram bots, given tag strings like `ERROR_COMMAND_SHOULD_BE_ON_PRIVATE`/`GROUP`).
 
 It is **not a standalone runnable app**: no `main()`, no `@SpringBootApplication`, and `pom.xml` inherits packaging from parent `org.themarioga:parent:2.0.0`. It's built as a **library JAR**, Spring-component-scanned (`@Configuration`, `@Service`, `@Repository`), meant to be pulled in by the two concrete game engines, which supply their own `Game`/`Player` subclasses (both abstract, `TABLE_PER_CLASS`) and a Spring Boot entry point.
 
@@ -59,7 +59,7 @@ graph TB
 ## Directory Structure
 
 ```
-Engine-Commons/
+Commons-Engine/
 ├── pom.xml                          # Maven module, inherits from parent:2.0.0
 ├── README.md                        # One-line ES description of purpose
 ├── src/main/java/org/themarioga/engine/commons/
