@@ -10,7 +10,9 @@ total_tokens: 29707
 
 ## System Overview
 
-**Commons-Engine** (Maven artifact `engine-commons`, package `org.themarioga.commons.engine`) is a shared **"backend commons" library** — confirmed by the Spanish README: *"Este proyecto contiene los Modelos, DAOs, Servicios, etc... que conforman el 'backend' común para los engines de Cartas Contra la Humanidad y Secret Hitler"* (the models, DAOs, and services forming the common backend for two game engines — Cards Against Humanity and Secret Hitler — apparently Telegram bots, given tag strings like `ERROR_COMMAND_SHOULD_BE_ON_PRIVATE`/`GROUP`).
+**Commons-Engine** (Maven artifact `commons-engine`, package `org.themarioga.commons.engine`) is a shared **"backend commons" library** — confirmed by the Spanish README: *"Este proyecto contiene los Modelos, DAOs, Servicios, etc... que conforman el 'backend' común para los engines de Cartas Contra la Humanidad y Secret Hitler"* (the models, DAOs, and services forming the common backend for two game engines — Cards Against Humanity and Secret Hitler).
+
+**It knows nothing about Telegram, and that is deliberate** — the games are meant to be multiplatform. Some tag strings (`ERROR_COMMAND_SHOULD_BE_ON_PRIVATE`/`GROUP`) leak the assumption, but the identity model doesn't: a front-end supplies a `username`/`roomname` and the engine never learns what a chat is. The Telegram front-ends live in `Commons-Telegram` + `CAH-Telegram`.
 
 It is **not a standalone runnable app**: no `main()`, no `@SpringBootApplication`, and `pom.xml` inherits packaging from parent `org.themarioga:parent:2.0.0`. It's built as a **library JAR**, Spring-component-scanned (`@Configuration`, `@Service`, `@Repository`), meant to be pulled in by the two concrete game engines, which supply their own `Game`/`Player` subclasses (both abstract, `TABLE_PER_CLASS`) and a Spring Boot entry point.
 
@@ -21,7 +23,7 @@ graph TB
         Bot[Bot / web layer]
     end
 
-    subgraph EngineCommons["engine-commons library"]
+    subgraph CommonsEngine["commons-engine library"]
         Config[config.CommonsConfig]
         subgraph Models["models"]
             Base --> User & Room & Game & Player
@@ -113,8 +115,8 @@ Commons-Engine/
 | File | Purpose | Tokens |
 |------|---------|--------|
 | `models/Base.java` | `@MappedSuperclass`: UUID `id` (`GenerationType.AUTO`), `creationDate`; equals/hashCode by id+date | 232 |
-| `models/User.java` | name, active flag, `Lang` (`@ManyToOne`, cascade PERSIST, lazy) | 222 |
-| `models/Room.java` | name, active flag | 179 |
+| `models/User.java` | `username` (unique **identity**), `name` (display), active flag, `Lang` (`@ManyToOne`, cascade PERSIST, lazy) | 222 |
+| `models/Room.java` | `roomname` (unique **identity**), `name` (display), active flag | 179 |
 | `models/Game.java` | Abstract, `TABLE_PER_CLASS`: status (`GameStatusEnum`), room (unique FK), creator (unique FK), deletionVotes (`@OneToMany` List\<User\>) | 392 |
 | `models/Player.java` | Abstract, `TABLE_PER_CLASS`: game FK, user FK (unique — global one-player-slot-per-user), joinOrder | 253 |
 | `models/Tag.java` | Composite PK (tag, lang); text up to 4000 chars — i18n message store | 298 |
@@ -123,7 +125,10 @@ Commons-Engine/
 **Patterns**: `@MappedSuperclass` for id/audit fields; `TABLE_PER_CLASS` inheritance for `Game`/`Player` (each concrete subclass gets its own table with all inherited columns); lazy `@ManyToOne`; explicit `@Index` on name columns.
 **Dependencies**: `enums.GameStatusEnum`.
 **Dependents**: DAO layer, service layer, security (`UserDetails` wraps `User`), tests.
-**Gotcha**: `Room.toString()` uses `getName()` twice instead of `getId()` for the `id=` field — copy-paste bug.
+
+**The identity split** is the thing to understand here. `username`/`roomname` are the **stable, unique** identity a front-end can look a row up by; `name` is what gets shown and can change at any time (people rename themselves and their groups). They were one field, which meant renaming yourself either collided with someone else or silently created a second account. Front-ends supply the identity: the Telegram one uses the `@alias` (or `tg:<id>`), and `tg:<chatId>` for rooms.
+
+**Gotchas**: `Base.equals`/`hashCode` must stay null-safe — they compare `id` + `creationDate`, both null on a transient entity, so the naive version NPE'd on anything not yet persisted.
 
 ### Enums
 
@@ -141,9 +146,9 @@ Commons-Engine/
 
 | File | Purpose | Tokens |
 |------|---------|--------|
-| `dao/InterfaceHibernateDao.java` | Generic CRUD contract: createOrUpdate, delete, deleteById, findOne, findAll, countAll, raw EntityManager/Session accessors | 98 |
-| `dao/AbstractHibernateDao.java` | Generic base impl; JPQL `"from " + clazz.getName()`; `EntityManager.merge/remove/find`; unwraps Hibernate `Session` | 362 |
-| `dao/intf/UserDao.java`, `RoomDao.java` | Extend `InterfaceHibernateDao<User/Room>` + `getByUsername`/`getRoomName` | 54, 58 |
+| `dao/InterfaceHibernateDao.java` | Generic CRUD contract: create, createOrUpdate, delete, deleteById, findOne, findAll, countAll, raw EntityManager/Session accessors | 98 |
+| `dao/AbstractHibernateDao.java` | Generic base impl; JPQL `"from " + clazz.getName()`; `EntityManager.persist/merge/remove/find`; unwraps Hibernate `Session` | 362 |
+| `dao/intf/UserDao.java`, `RoomDao.java` | Extend `InterfaceHibernateDao<User/Room>` + `getByUsername`/`getByRoomname` | 54, 58 |
 | `dao/intf/GameDao.java`, `PlayerDao.java` | **Standalone generic interfaces** (don't extend `InterfaceHibernateDao`), parameterized `<G extends Game>`/`<P extends Player>` — no impl provided (consumer responsibility) | 85, 78 |
 | `dao/intf/TagDao.java`, `LanguageDao.java` | Plain read-only lookup interfaces | 57, 57 |
 | `dao/impl/UserDaoImpl.java`, `RoomDaoImpl.java` | `@Repository`, extend `AbstractHibernateDao`; HQL `LIKE '%name%'` search | 137, 146 |
@@ -152,7 +157,9 @@ Commons-Engine/
 **Patterns**: interface + impl split, `@Repository`, inconsistent DI style (field-setter `@Autowired setEntityManager` on the abstract base vs constructor injection for Tag/Language DAOs). Uses Hibernate 6 `getSingleResultOrNull()`.
 **Dependencies**: `jakarta.persistence`, `org.hibernate.Session`, models.
 **Dependents**: service layer.
-**Gotcha**: `getByUsername`/`getRoomName` do **substring** match (`LIKE '%x%'`), not exact — could match unintended rows, and `getSingleResultOrNull()` throws if more than one row matches.
+**Gotcha — `create` vs `createOrUpdate`**: `createOrUpdate` is `merge`, which cannot insert an entity whose identifier is *derived* from an association (`@Id @OneToOne`) — it fails with "Identifier may not be null". That's what `create` (`persist`) is for. Downstream, `TelegramGame`/`TelegramPlayer` are exactly that shape.
+
+`getByUsername`/`getByRoomname` are **exact** matches on the unique identity columns (they used to be `LIKE '%x%'` substring searches against `name`, which could match unintended rows).
 
 ### Service Layer
 
@@ -172,7 +179,7 @@ Commons-Engine/
 **Gotchas**:
 - `I18NServiceImpl` caches all tags **once at startup** — DB edits afterward require an app restart (no invalidation).
 - Tag text uses a literal `\n` → real newline replacement baked into `I18NServiceImpl.getLangTags` — multi-line tags depend on this exact escaping convention in the seed SQL.
-- `createOrReactivate`: an existing **active** row with the same name throws `*AlreadyExistsException`; an **inactive** one is silently reactivated and renamed — a non-obvious soft-delete/reuse behavior.
+- `createOrReactivate(username, name, lang)`: matches on the **identity** column; an existing **active** row throws `*AlreadyExistsException`, an **inactive** one is silently reactivated and given the new display name — a non-obvious soft-delete/reuse behavior.
 - Validation coverage is inconsistent: `rename`/`setActive`/`setLanguage` skip `Assert` checks that `createOrReactivate` performs.
 - `UserServiceImpl.getByUsername` does **not** check the `active` flag (unlike `getById`), so inactive users can be fetched by username without error.
 
