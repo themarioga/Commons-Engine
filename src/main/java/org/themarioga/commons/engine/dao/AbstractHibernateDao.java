@@ -22,6 +22,15 @@ public abstract class AbstractHibernateDao<T extends Serializable> implements In
 
     // API
     @Override
+    public T create(final T entity) {
+        Assert.notNull(entity, "No puede ser null");
+
+        getEntityManager().persist(entity);
+
+        return entity;
+    }
+
+    @Override
     public T createOrUpdate(final T entity) {
         Assert.notNull(entity, "No puede ser null");
 
