@@ -84,8 +84,7 @@ class RoomServiceTest {
     void testCreateOrReactivate_AlreadyActive() {
         when(roomDao.getByRoomname("tg:-100001")).thenReturn(activeRoom);
 
-        Assertions.assertThrows(RoomAlreadyExistsException.class,
-                () -> roomService.createOrReactivate("tg:-100001", "First"));
+        Assertions.assertThrows(RoomAlreadyExistsException.class, () -> roomService.createOrReactivate("tg:-100001", "First"));
     }
 
     /**
